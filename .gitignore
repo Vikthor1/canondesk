@@ -1,0 +1,20 @@
+# Local AI session briefing — never commit
+SYSTEM_MEMORY.md
+
+# macOS
+.DS_Store
+
+# Environment variables
+.env
+.env.*
+
+# Dependencies (future)
+node_modules/
+
+# Build outputs (future)
+dist/
+build/
+coverage/
+
+# Logs
+*.log
