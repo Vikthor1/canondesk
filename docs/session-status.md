@@ -4,6 +4,37 @@
 
 ---
 
+## Patch 6 — Risk Result Screen (2026-05-27 — Session 10)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/js/ui.js` | Extended — `renderRoutingInterim` replaced by `renderRiskResultScreen`; call site in `renderMaterialRouter` updated |
+| `assets/css/styles.css` | Extended — Patch 6 section: result screen layout, recommendation card variants, result panels, action/warning/review lists, authorship checkpoint, AI-safe packet note, disclaimer, navigation, responsive block |
+| `docs/session-status.md` | Updated |
+
+**What Patch 6 added:**
+
+- `renderRiskResultScreen(ctx, result)` — full polished result screen replacing the Patch 5 interim. Renders: context bar (scenario, material, workflow task); colored recommendation card with text icon + label + rationale (restricted=✗/red, safe-with-review=⚠/amber, safe-with-attribution=ℹ/teal, safe=✓/green); allowed-actions panel ("Safer next steps") with conservative fallback if empty; blocked-actions panel ("What you should not do") with conservative fallback for restricted; warnings panel; review prompts panel; authorship-and-judgment checkpoint (always rendered, 3 prompts); AI-Safe Packet guidance text (restricted=do not enter AI tools; safe-with-review=consider human-reviewed working packet); disclaimer; back-to-router and back-to-scenarios navigation.
+- No color used alone — each recommendation state uses icon + text label + border color + background tint.
+- `renderRoutingInterim` completely removed. No stale naming remains.
+- `rules-engine.js` not modified.
+- No JSON files modified.
+- AI-Safe Packet Gate remains deferred — guidance is text only, no gate, no sanitizer, no document upload.
+
+**Authorship and judgment checkpoint (always rendered):**
+- Who reviews or signs off before this becomes official, public, or shared?
+- What status should AI-assisted output have: draft, summary, recommendation, working packet, or official record candidate?
+- Would using AI here clarify the work, or could it obscure responsibility, authorship, or institutional judgment?
+
+**Disclaimer (always rendered):**
+"This is a decision-support tool, not legal advice. Recommendations are based on general governance best practices and require human review before any institutional action."
+
+**Next patch:** Patch 7 — Decision Summary Export (session log exportable as Markdown; session reset).
+
+---
+
 ## Patch 5 — Material Router and Rules Engine (2026-05-27 — Session 9)
 
 **Status:** Complete. Exit criterion met.

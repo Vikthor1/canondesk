@@ -622,7 +622,7 @@
           var result = VC_RULES.evaluateRouterAnswers(answers, data);
           VC_STATE.setRouterResult(answers, result);
           ctx.state = VC_STATE.getState();
-          VC_UI.renderRoutingInterim(ctx, result);
+          VC_UI.renderRiskResultScreen(ctx, result);
         });
       }
 
@@ -630,93 +630,210 @@
       if (heading) { heading.focus(); }
     },
 
-    /* ── Routing interim result ──────────────────────────────────────────────── */
+    /* ── Risk result screen ──────────────────────────────────────────────────── */
 
-    renderRoutingInterim: function (ctx, result) {
-      var root = ctx.root;
-      var esc  = VC_UTILS.escHtml;
+    renderRiskResultScreen: function (ctx, result) {
+      var root  = ctx.root;
+      var state = VC_STATE.getState();
+      var esc   = VC_UTILS.escHtml;
+      var data  = ctx.data;
 
-      var recLabel = VC_RULES.getRecommendationLabel(result.recommendation);
+      // Resolve scenario title
+      var scenarios = (data && data.scenarios && Array.isArray(data.scenarios.scenarios))
+        ? data.scenarios.scenarios : [];
+      var scenarioId    = state.currentScenarioId;
+      var scenario      = null;
+      for (var i = 0; i < scenarios.length; i++) {
+        if (scenarios[i].id === scenarioId) { scenario = scenarios[i]; break; }
+      }
+      var scenarioTitle = scenarioId === 'custom-material'
+        ? 'My own material'
+        : (scenario ? scenario.title : '');
 
-      var chipClass = {
-        'restricted':            'rec-chip--red',
-        'safe-with-review':      'rec-chip--amber',
-        'safe-with-attribution': 'rec-chip--blue',
-        'safe':                  'rec-chip--green'
-      }[result.recommendation] || '';
-
-      var routeOptions  = VC_RULES.getWorkflowRouteOptions();
-      var workflowLabel = '';
-      for (var i = 0; i < routeOptions.length; i++) {
-        if (routeOptions[i].id === result.workflowRoute) {
-          workflowLabel = routeOptions[i].label;
+      // Resolve material category label
+      var categories = VC_RULES.getMaterialCategories(data, state.activeMode);
+      var matLabel   = result.materialCategory;
+      for (var j = 0; j < categories.length; j++) {
+        if (categories[j].id === result.materialCategory) {
+          matLabel = categories[j].label;
           break;
         }
       }
 
-      var warningHtml = '';
+      // Resolve workflow route label
+      var routeOptions  = VC_RULES.getWorkflowRouteOptions();
+      var workflowLabel = '';
+      for (var k = 0; k < routeOptions.length; k++) {
+        if (routeOptions[k].id === result.workflowRoute) {
+          workflowLabel = routeOptions[k].label;
+          break;
+        }
+      }
+
+      // Recommendation card config — text + icon, not color alone
+      var recConfigs = {
+        'restricted':            { label: 'Restricted — do not use AI with this material', icon: '&#x2717;', cardClass: 'result-rec--restricted' },
+        'safe-with-review':      { label: 'Safe — with human review required',             icon: '&#x26a0;', cardClass: 'result-rec--review'      },
+        'safe-with-attribution': { label: 'Safe — with attribution required',              icon: '&#x2139;', cardClass: 'result-rec--attribution'  },
+        'safe':                  { label: 'Safe for AI assistance',                             icon: '&#x2713;', cardClass: 'result-rec--safe'         }
+      };
+      var rec = recConfigs[result.recommendation]
+        || { label: 'Review required before proceeding', icon: '&#x26a0;', cardClass: 'result-rec--review' };
+
+      // Allowed actions panel
+      var allowedHtml = '';
+      if (result.allowedActions && result.allowedActions.length > 0) {
+        allowedHtml =
+          '<section class="result-panel result-panel--allowed" aria-label="Safer next steps">' +
+            '<h3 class="result-panel-heading">Safer next steps</h3>' +
+            '<ul class="result-action-list">' +
+              result.allowedActions.map(function (a) {
+                return '<li class="result-action-item">' + esc(a) + '</li>';
+              }).join('') +
+            '</ul>' +
+          '</section>';
+      } else if (result.recommendation !== 'restricted') {
+        allowedHtml =
+          '<section class="result-panel result-panel--allowed" aria-label="Safer next steps">' +
+            '<h3 class="result-panel-heading">Safer next steps</h3>' +
+            '<p class="result-panel-fallback">Proceed with human review before using AI-assisted output in official communications or institutional records.</p>' +
+          '</section>';
+      }
+
+      // Blocked actions panel
+      var blockedHtml = '';
+      if (result.blockedActions && result.blockedActions.length > 0) {
+        blockedHtml =
+          '<section class="result-panel result-panel--blocked" aria-label="What you should not do">' +
+            '<h3 class="result-panel-heading">What you should not do</h3>' +
+            '<ul class="result-action-list">' +
+              result.blockedActions.map(function (a) {
+                return '<li class="result-action-item">' + esc(a) + '</li>';
+              }).join('') +
+            '</ul>' +
+          '</section>';
+      } else if (result.recommendation === 'restricted') {
+        blockedHtml =
+          '<section class="result-panel result-panel--blocked" aria-label="What you should not do">' +
+            '<h3 class="result-panel-heading">What you should not do</h3>' +
+            '<p class="result-panel-fallback">Do not upload this material to external AI tools, chatbots, or summarizers.</p>' +
+          '</section>';
+      }
+
+      // Warnings panel
+      var warningsHtml = '';
       if (result.warnings && result.warnings.length > 0) {
-        var extraCount = result.warnings.length - 1;
-        warningHtml =
-          '<div class="interim-warning">' +
-            '<p class="interim-warning-text">' + esc(result.warnings[0]) + '</p>' +
-            (extraCount > 0
-              ? '<p class="interim-warning-count">+ ' + extraCount +
-                  ' more warning' + (extraCount > 1 ? 's' : '') + '</p>'
-              : '') +
+        warningsHtml =
+          '<section class="result-panel result-panel--warnings" aria-label="Warnings">' +
+            '<h3 class="result-panel-heading">Warnings</h3>' +
+            '<ul class="result-warning-list">' +
+              result.warnings.map(function (w) {
+                return '<li class="result-warning-item">' + esc(w) + '</li>';
+              }).join('') +
+            '</ul>' +
+          '</section>';
+      }
+
+      // Review prompts panel
+      var reviewHtml = '';
+      if (result.reviewPrompts && result.reviewPrompts.length > 0) {
+        reviewHtml =
+          '<section class="result-panel result-panel--review" aria-label="Human review questions">' +
+            '<h3 class="result-panel-heading">Human review questions</h3>' +
+            '<ul class="result-review-list">' +
+              result.reviewPrompts.map(function (p) {
+                return '<li class="result-review-item">' + esc(p) + '</li>';
+              }).join('') +
+            '</ul>' +
+          '</section>';
+      }
+
+      // AI-Safe Packet guidance — text only, no gate, no sanitizer
+      var packetNoteHtml = '';
+      if (result.recommendation === 'restricted') {
+        packetNoteHtml =
+          '<div class="result-packet-note result-packet-note--restricted">' +
+            '<p>The original material should not enter external AI tools under any circumstances. ' +
+            'If AI assistance is needed for related work, assemble a separate, human-reviewed ' +
+            'working packet from non-restricted materials only.</p>' +
+          '</div>';
+      } else if (result.recommendation === 'safe-with-review') {
+        packetNoteHtml =
+          '<div class="result-packet-note">' +
+            '<p>Before using AI with this material, consider preparing a human-reviewed working ' +
+            'packet: remove or summarize sensitive content, confirm no restricted information is ' +
+            'present, and have a colleague review the packet before AI use. Do not upload the ' +
+            'original source directly.</p>' +
           '</div>';
       }
 
       root.innerHTML =
-        '<div class="screen interim-result-screen">' +
-          '<div class="interim-result-header">' +
-            '<h2 class="interim-result-heading" tabindex="-1">Routing recommendation</h2>' +
+        '<div class="screen risk-result-screen">' +
+
+          '<div class="result-header">' +
+            '<h2 class="result-heading" tabindex="-1">AI-use recommendation</h2>' +
+            '<div class="result-context-bar">' +
+              (scenarioTitle ? '<span class="result-context-item">Scenario: <strong>' + esc(scenarioTitle) + '</strong></span>' : '') +
+              (matLabel      ? '<span class="result-context-item">Material: <strong>' + esc(matLabel)      + '</strong></span>' : '') +
+              (workflowLabel ? '<span class="result-context-item">AI task: <strong>'  + esc(workflowLabel) + '</strong></span>' : '') +
+            '</div>' +
           '</div>' +
 
-          '<div class="interim-result-card">' +
-            '<div class="rec-chip ' + esc(chipClass) + '">' + esc(recLabel) + '</div>' +
-
-            (result.rationale
-              ? '<p class="interim-rationale">' + esc(result.rationale) + '</p>'
-              : '') +
-
-            (workflowLabel
-              ? '<p class="interim-workflow">AI task: <strong>' + esc(workflowLabel) + '</strong></p>'
-              : '') +
-
-            warningHtml +
-
-            '<p class="interim-next-note">' +
-              'The full result screen &#8212; with allowed actions, blocked actions, and review ' +
-              'guidance &#8212; is coming in the next build.' +
-            '</p>' +
+          '<div class="result-rec-card ' + esc(rec.cardClass) + '" role="status">' +
+            '<div class="result-rec-top">' +
+              '<span class="result-rec-icon" aria-hidden="true">' + rec.icon + '</span>' +
+              '<span class="result-rec-label">' + esc(rec.label) + '</span>' +
+            '</div>' +
+            (result.rationale ? '<p class="result-rec-rationale">' + esc(result.rationale) + '</p>' : '') +
           '</div>' +
 
-          '<div class="interim-result-nav">' +
-            '<button class="btn btn-ghost" id="btn-back-router" type="button">' +
+          allowedHtml +
+          blockedHtml +
+          warningsHtml +
+          reviewHtml +
+
+          '<section class="result-panel result-panel--authorship" aria-label="Authorship and judgment checkpoint">' +
+            '<h3 class="result-panel-heading">Authorship and judgment checkpoint</h3>' +
+            '<ul class="result-review-list">' +
+              '<li class="result-review-item">Who reviews or signs off before this becomes official, public, or shared?</li>' +
+              '<li class="result-review-item">What status should AI-assisted output have: draft, summary, recommendation, working packet, or official record candidate?</li>' +
+              '<li class="result-review-item">Would using AI here clarify the work, or could it obscure responsibility, authorship, or institutional judgment?</li>' +
+            '</ul>' +
+          '</section>' +
+
+          packetNoteHtml +
+
+          '<p class="result-disclaimer">' +
+            'This is a decision-support tool, not legal advice. Recommendations are based on general ' +
+            'governance best practices and require human review before any institutional action.' +
+          '</p>' +
+
+          '<div class="result-nav">' +
+            '<button class="btn btn-ghost" id="btn-revise-router" type="button">' +
               '&larr; Revise answers' +
             '</button>' +
-            '<button class="btn btn-ghost" id="btn-back-scenarios-interim" type="button">' +
+            '<button class="btn btn-ghost" id="btn-result-back-scenarios" type="button">' +
               '&larr; Back to scenarios' +
             '</button>' +
           '</div>' +
+
         '</div>';
 
-      var backRouterBtn = VC_UTILS.qs('#btn-back-router', root);
-      if (backRouterBtn) {
-        backRouterBtn.addEventListener('click', function () {
+      var reviseBtn = VC_UTILS.qs('#btn-revise-router', root);
+      if (reviseBtn) {
+        reviseBtn.addEventListener('click', function () {
           VC_UI.renderMaterialRouter(ctx);
         });
       }
 
-      var backScenariosBtn = VC_UTILS.qs('#btn-back-scenarios-interim', root);
-      if (backScenariosBtn) {
-        backScenariosBtn.addEventListener('click', function () {
+      var scenariosBtn = VC_UTILS.qs('#btn-result-back-scenarios', root);
+      if (scenariosBtn) {
+        scenariosBtn.addEventListener('click', function () {
           VC_UI.renderScenarioSelector(ctx);
         });
       }
 
-      var heading = VC_UTILS.qs('.interim-result-heading', root);
+      var heading = VC_UTILS.qs('.result-heading', root);
       if (heading) { heading.focus(); }
     },
 
