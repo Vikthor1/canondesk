@@ -4,6 +4,33 @@
 
 ---
 
+## Patch 3 — Governance Reference Panel (2026-05-27 — Session 6)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/js/ui.js` | Extended — added `buildGovernancePanelContent`, `buildRefTriggerHtml`, `openPanel`, `closePanel`; updated `renderLandingScreen` and `renderModeSelector` to wire the trigger |
+| `assets/css/styles.css` | Extended — new color tokens (`--color-teal`, `--color-teal-bg`, `--color-teal-border`, `--color-ai-output`, `--color-ai-output-bg`, `--color-ai-output-border`); all panel and layer styles |
+
+**What Patch 3 added:**
+- Optional "How this works" trigger link on the landing screen and mode selector screen
+- Inline expandable reference panel showing all six governance layers with mode-specific vocabulary labels, status chips, and enforced-rule notes
+- Panel vocabulary updates automatically when the active mode is changed while the panel is open
+- Close button returns keyboard focus to the trigger
+- Panel is never mandatory — user path is unaffected if never opened
+- Layer left-border color coding: green (L1, L6), amber/yellow (L2), teal (L3), orange (L4), red (L5)
+- Status chips: green (Trusted source, Public output), amber (Working material), teal (AI-safe packet), orange (Review before use), red (Restricted)
+
+**New constants in `ui.js` (closed over, not exported):**
+- `LAYER_STATUS_LABELS` — maps riskLevel to human-readable status text
+- `LAYER_STATUS_CLASSES` — maps riskLevel to CSS chip class
+- `LAYER_RULE_NOTES` — maps enforcedRule keys to display text
+
+**Next patch:** Patch 4 — Scenario Selector (Mode 3 scenarios from `scenarios.json`).
+
+---
+
 ## Patch 2 — Landing Screen + Mode Selector + State Persistence (2026-05-27 — Session 5)
 
 **Status:** Complete. Exit criterion met.
