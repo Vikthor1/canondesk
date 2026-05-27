@@ -1,4 +1,4 @@
-# CanonDesk — Lean August MVP Checkpoint
+# Veritas Compass — Lean August MVP Checkpoint
 
 *Version 1.0 — May 2026*
 
@@ -45,15 +45,15 @@ All JSON files carry a `meta` block at the top:
 
 ```json
 "meta": {
-  "workingName": "CanonDesk",
-  "brandingStatus": "provisional",
+  "workingName": "Veritas Compass",
+  "brandingStatus": "locked",
   "version": "0.1.0-stub"
 }
 ```
 
 - `workingName` is the internal identifier. Not hard-coded in UI copy.
-- `brandingStatus: "provisional"` signals the name is not locked for public release.
-- When `config.js` is written (Week 2), it will expose `appName` and `brandingStatus` as global config variables. All UI copy references `config.appName`, never the string `"CanonDesk"` directly.
+- `brandingStatus: "locked"` — name confirmed 2026-05-26. Former provisional name: CanonDesk.
+- When `config.js` is written (Week 2), it will expose `appName` and `brandingStatus` as global config variables. All UI copy references `config.appName`, never the string `"Veritas Compass"` directly.
 
 ---
 

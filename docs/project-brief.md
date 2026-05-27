@@ -1,12 +1,18 @@
-# CanonDesk — Project Brief
+# Veritas Compass — Project Brief
 
 *Version 1.0 — May 2026*
 
 ---
 
+## Tagline
+
+*An AI workflow guide for privacy, authorship, and academic judgment*
+
+---
+
 ## One-Sentence Pitch
 
-CanonDesk helps faculty, researchers, and academic administrators decide what knowledge can safely move through AI tools, what must stay protected, and what must remain human-reviewed — before they make a mistake they cannot undo.
+Veritas Compass helps faculty, researchers, and academic administrators decide what knowledge can safely move through AI tools, what must stay protected, and what must remain human-reviewed — before they make a mistake they cannot undo.
 
 ---
 
@@ -16,7 +22,7 @@ Faculty and administrators at CUNY and peer institutions are making governance d
 
 Each action crosses a governance boundary that most users have never been asked to think about. The result is a pattern of ungoverned AI use that erodes the distinction between trusted records and AI-generated outputs, between official policy and AI-assisted draft language, between protected student data and sanitized working material.
 
-CanonDesk makes those boundaries visible, legible, and actionable — without requiring legal expertise, IT infrastructure, or institutional approval to use.
+Veritas Compass makes those boundaries visible, legible, and actionable — without requiring legal expertise, IT infrastructure, or institutional approval to use.
 
 ---
 

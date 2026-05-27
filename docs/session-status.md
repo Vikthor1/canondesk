@@ -1,4 +1,4 @@
-# CanonDesk — Session Status
+# Veritas Compass — Session Status
 
 *Last updated: 2026-05-26*
 
@@ -34,9 +34,13 @@
 
 | Field | Value |
 |---|---|
-| `workingName` | `"CanonDesk"` |
-| `brandingStatus` | `"provisional"` |
-| Final name decision | Deferred — lock before any UI copy is written |
+| **Active name** | **Veritas Compass** |
+| **Tagline** | *An AI workflow guide for privacy, authorship, and academic judgment* |
+| `workingName` (JSON meta) | `"Veritas Compass"` |
+| `brandingStatus` | `"locked"` |
+| Former provisional name | CanonDesk (internal/session use only) |
+| Name decision date | 2026-05-26 (end of Session 2) |
+| Repo / local folder | Remain `canondesk` — rename deferred pending decision |
 | Config pattern | All JSON files carry `meta.workingName` + `meta.brandingStatus`; future `config.js` will expose `appName` as a global variable |
 
 ---
@@ -84,7 +88,7 @@
 
 ## Open Decisions
 
-- [ ] Confirm final product name (CanonDesk / Provenance / ScholarBridge) — lock before HTML copy is written
+- [x] Confirm final product name — **Veritas Compass** (locked 2026-05-26; CanonDesk was provisional)
 - [x] Confirm August demo mode: Mode 3 — Administrative / Faculty Affairs (locked)
 - [x] GitHub repo created: https://github.com/Vikthor1/canondesk (private)
 - [x] Obsidian vault path confirmed and layer initialized
