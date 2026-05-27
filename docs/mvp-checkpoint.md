@@ -10,6 +10,14 @@ This document defines the minimum viable scope for the August demo. It governs w
 
 ---
 
+## Architectural Decisions — Pre-Patch-2 Stress Test (2026-05-27)
+
+- **Governance / layer map:** Reference panel only for the August MVP. Not a required step in the main user path. Accessible from the landing, mode selector, router, and result screens via a "How does this work?" link. Built in Patch 3 as an optional component; never blocks routing.
+- **Workflow Route (planned, not a v1 screen):** A future router dimension that will ask "What are you trying to use AI for?" alongside "What material do you have?" This will guide AI task-type appropriateness (summarizing, drafting, analyzing, generating), output status (draft, summary, recommendation, official record), and required human review checkpoints. The concept is seeded in the `scenarios.json` step logic. Veritas Compass guides users *before* they use an AI tool — it is not a multi-LLM orchestration system and must not be built or positioned as one.
+- **Authorship and academic judgment:** Addressed minimally in the risk result screen (Patch 6) via two brief plain-language prompts. Not a new screen or routing dimension in v1.
+
+---
+
 ## August Demo Constraint
 
 **Mode:** Mode 3 — Administrative / Faculty Affairs Workflow
@@ -64,6 +72,7 @@ These items will not appear in any v1 file, JSON stub, or Week 1 deliverable:
 - User accounts, SSO, login
 - Real file upload or processing
 - Live AI provider calls or API keys
+- Multi-LLM orchestration or real-time AI tool routing across providers
 - Audit logs or institutional configuration panel
 - Bilingual interface
 - MCP integration

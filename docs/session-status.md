@@ -4,6 +4,23 @@
 
 ---
 
+## Pre-Patch-2 Architectural Stress Test (2026-05-27 — Session 4)
+
+**Status:** Complete.
+
+**Verdict:** Proceed with modifications.
+
+**Decisions recorded before Patch 2 implementation:**
+- Governance / layer map reclassified as optional reference panel; removed from mandatory user path.
+- Patch 2 scope revised to: Landing Screen + Mode Selector + State Persistence (replaces developer boot screen).
+- Shared utilities module (`assets/js/utils.js`) and rendering module (`assets/js/ui.js`) established as module boundary; `app.js` becomes initialization and event wiring only; `renderBootScreen` removed from `app.js`.
+- Workflow Route concept added to plan: a future router dimension ("What are you trying to use AI for?") that preserves the authorship and academic judgment promise without becoming a multi-LLM orchestration system.
+- Authorship and academic judgment addressed minimally in the risk result screen (Patch 6) via two plain-language prompts.
+
+**Next patch:** Revised Patch 2 implementation (Landing Screen + Mode Selector + State Persistence + utilities/module boundary).
+
+---
+
 ## Current Phase: Week 2 — Patch 1 Complete
 
 ### Patch 1 — Static Shell and Boot Architecture (2026-05-27 — Session 3)

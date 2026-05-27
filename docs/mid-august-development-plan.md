@@ -16,6 +16,8 @@ This plan synthesizes those documents into a narrow, patch-by-patch build sequen
 
 **Do not rewrite this plan during a build session.** Update `docs/session-status.md` for milestone notes. Update this plan only when the patch sequence changes or a new risk surfaces.
 
+**Pre-Patch-2 architectural stress test (2026-05-27) — Verdict: Proceed with modifications.** Four decisions recorded before UI implementation begins. See §4 (revised user path, layer map reclassified), §6 (revised Patch 2 and Patch 3 definitions), and §9 (Workflow Route concept).
+
 ---
 
 ## 2. Product Identity
@@ -53,13 +55,14 @@ This is the first complete vertical slice. Build it before anything else. Extend
 
 | Step | Screen | Status |
 |---|---|---|
-| 1 | Landing — app name, tagline, three-question hook, disclaimer | Build in Patch 1 (shell) |
+| 1 | Landing — app name, tagline, call to action, disclaimer | Build in Patch 2 (replaces boot screen) |
 | 2 | Mode selector — 4 modes, Mode 3 emphasized, localStorage-persisted | Build in Patch 2 |
-| 3 | Governance / trust map — 6 layers, Mode 3 vocabulary, color-coded | Build in Patch 3 |
-| 4 | Scenario selector — 2 active Mode 3 scenarios + "describe my own" | Build in Patch 4 |
-| 5 | Document / material router — progressive questionnaire, live risk indicator | Build in Patch 5 |
-| 6 | Risk result screen — SAFE / SAFE WITH REVIEW / RESTRICTED + rationale | Build in Patch 6 |
-| 7 | Decision summary export — session log, Markdown export | Build in Patch 7 |
+| 3 | Scenario selector — 2 active Mode 3 scenarios + "describe my material" | Build in Patch 4 |
+| 4 | Document / material router — progressive questionnaire, live risk indicator | Build in Patch 5 |
+| 5 | Risk result screen — SAFE / SAFE WITH REVIEW / RESTRICTED + rationale + authorship prompts | Build in Patch 6 |
+| 6 | Decision summary export — session log, Markdown export | Build in Patch 7 |
+
+**Governance / trust map (six-layer model) — reclassified as optional reference panel.** Not a required step in the main user path. Built in Patch 3 as an accessible component, reachable via a "How does this work?" link from the landing, mode selector, router, and result screens. Users routing a document never pass through the layer map as a mandatory step; it is available at any time for reference.
 
 ### Primary Demo Scenario
 
@@ -101,9 +104,12 @@ These eight files must exist and be wired correctly before any UI expansion. The
 
 ### Script Load Order (Fixed — enforced by order in `index.html`)
 
-```
-config.js → data-loader.js → state.js → rules-engine.js → ui.js → app.js
-```
+`config.js → state.js → data-loader.js → utils.js → ui.js → app.js` (then `rules-engine.js` added in Patch 5)
+
+**Module boundary rule (enforced from Patch 2 forward):**
+- `utils.js` — pure helper functions only (`escHtml`, `setText`, etc.); no DOM access; no state access; exposed as `window.VC_UTILS`
+- `ui.js` — all DOM rendering functions; reads `VC_STATE` and `VC_DATA`; never fetches data directly
+- `app.js` — initialization and event wiring only; no DOM rendering functions
 
 `modes.js`, `scenarios.js`, `packet-builder.js`, and `report-builder.js` from the master roadmap are **deferred** — their responsibilities are handled inline by `data-loader.js` (data) and `ui.js` (rendering) in v1. Add dedicated files only if a module grows large enough to warrant extraction.
 
@@ -141,44 +147,45 @@ Each patch is one session's work. Complete the exit criterion before opening the
 
 ---
 
-### Patch 2 — Mode Selector and State Persistence
+### Patch 2 — Landing Screen + Mode Selector + State Persistence
 
-**Goal:** A functional mode selector that renders from `DATA.modes`, persists selection, and applies Mode 3 vocabulary throughout.
+**Goal:** Replace the developer boot screen with a real user-facing landing screen, build a functional mode selector, and establish the shared utilities and rendering module architecture.
 
 **Files touched:**
-- `assets/js/ui.js` (create — mode selector render function only)
-- `assets/js/app.js` (create — initialization to mode selector screen)
-- `assets/css/styles.css` (extend — mode card components)
-- `index.html` (extend — mode selector screen container wired)
+- `assets/js/utils.js` (create — shared helpers: `escHtml`, `setText`; exposed as `window.VC_UTILS`; loaded before `ui.js`)
+- `assets/js/ui.js` (create — `renderLandingScreen()` and `renderModeSelector()`; owns all DOM rendering)
+- `assets/js/app.js` (update — initialization and event wiring only; delegates all rendering to `ui.js`; `renderBootScreen` removed)
+- `assets/css/styles.css` (extend — landing screen layout, mode card components)
+- `index.html` (extend — `utils.js` added to load order before `ui.js`; mode selector screen container wired)
 - `docs/session-status.md` (update)
 
 **Files not touched:** `config.js`, `state.js`, `data-loader.js`, `rules-engine.js`, all JSON files, all `docs/` except `session-status.md`
 
-**Exit criterion:** All four mode cards render with correct labels and descriptions from `DATA.modes`. Selecting a mode writes to `STATE.mode` and persists on page reload. Mode 3 is visually distinguished (not just listed). Mode can be changed without losing previous decisions.
+**Exit criterion:** Landing screen renders on boot with app name, tagline, and a clear call to action. Boot status detail is console-only (not visible to users). All four mode cards render with correct labels and descriptions from `DATA.modes`. Selecting a mode writes to `VC_STATE.activeMode` and persists on page reload. Mode 3 is visually distinguished. Mode can be changed without losing previous routing decisions.
 
-**Test to run:** Select Mode 3. Reload. Confirm Mode 3 is still selected. Select Mode 1. Reload. Confirm Mode 1 is still selected.
+**Test to run:** Verify no "Boot check" text is visible in the UI. Select Mode 3. Reload. Confirm Mode 3 is still selected. Select Mode 1. Reload. Confirm Mode 1 is still selected.
 
-**Commit message pattern:** `feat: mode selector with localStorage persistence`
+**Commit message pattern:** `feat: landing screen, mode selector, utils/ui module architecture`
 
 ---
 
-### Patch 3 — Governance / Trust Map
+### Patch 3 — Governance Reference Panel (Optional)
 
-**Goal:** Six-layer visual rendered with mode-specific vocabulary from `DATA.modes`, applying the active mode from `STATE.mode`.
+**Goal:** Build the six-layer governance reference panel as an accessible, toggleable component. This is not a required step in the main user path — it is reachable at any time via a "How does this work?" link from the landing, mode selector, router, and result screens.
 
 **Files touched:**
-- `assets/js/ui.js` (extend — layer map render function)
-- `assets/css/styles.css` (extend — layer map, color states: green/amber/red)
-- `index.html` (extend — layer map screen container wired)
+- `assets/js/ui.js` (extend — `renderGovernancePanel()` and toggle logic)
+- `assets/css/styles.css` (extend — reference panel layout, color states: green/amber/orange/red; all states distinguishable without color)
+- `index.html` (extend — reference panel container; "How does this work?" link added to landing and mode selector)
 - `docs/session-status.md` (update)
 
 **Files not touched:** All other JS files, all JSON files
 
-**Exit criterion:** Layer map renders all six layers with Mode 3 vocabulary on initial load. Switching to a different mode re-renders the map with correct vocabulary. Clicking a layer expands its description. Color coding is correct: Layers 1, 3, 6 green; Layer 2 amber; Layer 4 orange; Layer 5 red. All text is legible without color alone (label or icon supplements color).
+**Exit criterion:** Complete Mode 3 demo path runs without opening the panel — panel is never required. "How does this work?" link is visible on the landing and mode selector screens. Clicking it renders the six-layer panel with the active mode's vocabulary. Switching modes updates panel vocabulary. Closing the panel returns focus to the originating screen. Color coding uses Layers 1 and 6 as green, Layer 2 as amber, Layer 3 as blue-green, Layer 4 as orange, Layer 5 as red. No color is used alone — each state includes a text label or icon.
 
-**Test to run:** Switch modes. Verify Layer 5 label changes across modes. Verify Layer 3 label reads "Briefing & Communications Packet" in Mode 3.
+**Test to run:** Run the full Mode 3 demo path without touching the panel. Then open the panel from the mode selector. Switch to Mode 1. Verify Layer 3 label changes to "Research Working Packet." Close the panel. Confirm routing state is unchanged.
 
-**Commit message pattern:** `feat: governance layer map with mode-specific vocabulary`
+**Commit message pattern:** `feat: governance reference panel (optional, accessible)`
 
 ---
 
@@ -250,7 +257,11 @@ Each patch is one session's work. Complete the exit criterion before opening the
 
 **Disclaimer requirement:** The following text must appear on every result screen, below the recommendation: *"This is a decision-support tool, not legal advice. Recommendations are based on general governance best practices and require human review before any institutional action."*
 
-**Exit criterion:** All three states render correctly from `STATE.routingResult`. Disclaimer is visible on all three states without scrolling on a 1024px viewport. Next-step button adapts to recommendation. No-recursive-upload warning appears in the result when triggered.
+**Authorship and academic judgment prompts:** Every result screen must also include two brief plain-language prompts below the routing recommendation. These address the authorship and academic judgment pillars of the product promise and do not change the routing result:
+- *"Who reviews or signs off before this becomes official?"*
+- *"What status should AI-assisted output have: draft, summary, recommendation, or official record?"*
+
+**Exit criterion:** All three states render correctly from `STATE.routingResult`. Disclaimer is visible on all three states without scrolling on a 1024px viewport. Authorship prompts are visible on all three states. Next-step button adapts to recommendation. No-recursive-upload warning appears in the result when triggered.
 
 **Test to run:** Run the full `mode3-briefing-memo` scenario routing. Confirm RESTRICTED result for personnel-containing committee notes. Confirm SAFE WITH REVIEW for procedural notes. Confirm disclaimer is visible.
 
@@ -430,6 +441,8 @@ The prototype is built for a solo developer and a mid-August demo. It must also 
 - **`FEATURES` flags in `config.js`.** Live AI routing, file upload, MCP integration, and multi-user support are gated behind flags. Enabling them is a config change, not a refactor.
 - **No backend assumptions in v1.** State shape is designed to be serializable to an API payload without restructuring. Session decisions array maps naturally to a database record.
 - **Single HTML shell.** All screen transitions are JavaScript-driven. A future React or Svelte migration wraps the existing logic without rewriting governance rules.
+
+**Workflow Route concept (planned future dimension — not a v1 screen):** A second routing axis that will ask "What are you trying to use AI for?" alongside the existing "What material do you have?" question. This will guide AI task-type appropriateness (summarizing vs. drafting vs. analyzing vs. generating), output status designation (draft, summary, recommendation, or official record), and required human review checkpoints. The concept is seeded in the step logic of `assets/data/scenarios.json`. Veritas Compass guides users *before* they use an AI tool — it is not a multi-LLM orchestration system and must never be positioned as one. The Workflow Route adds depth to the governance model without adding AI provider calls or live routing across systems.
 
 **What must not be added before the August demo,** regardless of how reasonable it sounds:
 
