@@ -1,0 +1,200 @@
+{
+  "meta": {
+    "workingName": "CanonDesk",
+    "brandingStatus": "provisional",
+    "version": "0.1.0-stub",
+    "note": "Routing logic is enforced by rules-engine.js (Week 3). This file is content-only configuration."
+  },
+  "layers": [
+    {
+      "id": 1,
+      "defaultLabel": "Canonical Source",
+      "riskLevel": "safe-with-attribution",
+      "description": "Trusted records, published scholarship, officially approved policy. Safe for AI reference with proper attribution. AI output cannot return to this layer without human review.",
+      "color": "green"
+    },
+    {
+      "id": 2,
+      "defaultLabel": "Working Context",
+      "riskLevel": "safe-with-review",
+      "description": "Work in progress — research drafts, developing policy language, course materials under revision. Safe for AI assistance with human review before adoption.",
+      "color": "yellow"
+    },
+    {
+      "id": 3,
+      "defaultLabel": "AI-Safe Packet",
+      "riskLevel": "safe-prepared",
+      "description": "A curated extract of reviewed, non-restricted materials prepared specifically for AI processing. Token-budgeted and confirmed clean.",
+      "color": "blue"
+    },
+    {
+      "id": 4,
+      "defaultLabel": "AI Output / Drafting",
+      "riskLevel": "review-required",
+      "description": "AI-generated content, drafts, and summaries. Must be reviewed before use. Cannot be re-introduced to Layer 1 (Canonical Source) without explicit human validation.",
+      "color": "orange",
+      "enforcedRule": "no-recursive-upload"
+    },
+    {
+      "id": 5,
+      "defaultLabel": "Restricted",
+      "riskLevel": "restricted",
+      "description": "FERPA-protected student data, personnel records, confidential institutional communications. Must never enter external AI systems under any circumstances.",
+      "color": "red",
+      "enforcedRule": "never-external-ai"
+    },
+    {
+      "id": 6,
+      "defaultLabel": "Public Output",
+      "riskLevel": "safe-post-review",
+      "description": "Conference papers, published guides, press materials, and approved public communications. Safe after review cycle is complete.",
+      "color": "green"
+    }
+  ],
+  "enforcedRules": [
+    {
+      "id": "no-recursive-upload",
+      "label": "No Recursive Upload",
+      "description": "AI-generated output (Layer 4) cannot flow back into Layer 1 (Canonical Source) without explicit human review and validation. Enforced as a UI checkpoint in the packet builder.",
+      "appliesTo": [4]
+    },
+    {
+      "id": "never-external-ai",
+      "label": "Never External AI",
+      "description": "Layer 5 materials must never be submitted to any external AI tool, API, or cloud service. This rule cannot be overridden by any mode or configuration.",
+      "appliesTo": [5]
+    }
+  ],
+  "materialCategories": [
+    {
+      "id": "committee-notes",
+      "label": "Committee Notes",
+      "description": "Minutes, notes, or records from faculty or administrative committee meetings.",
+      "applicableModes": ["administrative"],
+      "routingRules": {
+        "defaultLayer": 5,
+        "conditions": [
+          {
+            "id": "contains-personnel-discussion",
+            "label": "Contains personnel discussion",
+            "layer": 5,
+            "recommendation": "restricted",
+            "message": "Committee notes containing personnel discussions are restricted. Do not enter external AI tools. Extract and isolate personnel content before any AI processing.",
+            "severity": "blocking"
+          },
+          {
+            "id": "procedural-only",
+            "label": "Procedural content only — no personnel references",
+            "layer": 2,
+            "recommendation": "safe-with-review",
+            "message": "Procedural committee notes are safe for AI assistance with review. Confirm no personnel content is present before building into packet.",
+            "severity": "advisory"
+          }
+        ]
+      },
+      "status": "active"
+    },
+    {
+      "id": "draft-policy",
+      "label": "Draft Policy Language",
+      "description": "Working drafts of institutional policies, governance documents, or procedural guidelines not yet officially adopted.",
+      "applicableModes": ["administrative"],
+      "routingRules": {
+        "defaultLayer": 2,
+        "conditions": [
+          {
+            "id": "pre-approval",
+            "label": "Pre-approval draft",
+            "layer": 2,
+            "recommendation": "safe-with-review",
+            "message": "Draft policy language is safe for AI assistance. AI output must be reviewed before adoption. AI-generated revisions cannot become official policy without the standard approval process.",
+            "severity": "advisory"
+          }
+        ]
+      },
+      "status": "active"
+    },
+    {
+      "id": "approved-policy",
+      "label": "Approved Institutional Policy",
+      "description": "Officially adopted policies, governance documents, or procedures that have completed the institutional approval process.",
+      "applicableModes": ["administrative"],
+      "routingRules": {
+        "defaultLayer": 1,
+        "conditions": [
+          {
+            "id": "canonical",
+            "label": "Officially adopted",
+            "layer": 1,
+            "recommendation": "safe-with-attribution",
+            "message": "Approved policy is canonical. Safe for AI reference and citation. Do not modify without completing the official approval process. AI summaries must cite the source document.",
+            "severity": "informational"
+          }
+        ]
+      },
+      "status": "active"
+    },
+    {
+      "id": "personnel-records",
+      "label": "Personnel Records",
+      "description": "Faculty personnel files, evaluation records, reappointment or tenure documentation, HR correspondence, or any record linked to an individual's employment status.",
+      "applicableModes": ["administrative"],
+      "routingRules": {
+        "defaultLayer": 5,
+        "conditions": [
+          {
+            "id": "always-restricted",
+            "label": "Personnel record (any type)",
+            "layer": 5,
+            "recommendation": "restricted",
+            "message": "Personnel records are always restricted. Never enter external AI tools. Institutional data governance and applicable law apply.",
+            "severity": "blocking"
+          }
+        ]
+      },
+      "status": "active"
+    },
+    {
+      "id": "manuscript-draft",
+      "label": "Manuscript or Research Draft",
+      "description": "Unpublished research writing, article drafts, book chapters, or grant narratives in development.",
+      "applicableModes": ["faculty-research"],
+      "routingRules": {
+        "defaultLayer": 2,
+        "conditions": []
+      },
+      "status": "stub"
+    },
+    {
+      "id": "syllabus",
+      "label": "Course Syllabus",
+      "description": "A syllabus or course outline, approved or in development.",
+      "applicableModes": ["teaching-ctl"],
+      "routingRules": {
+        "defaultLayer": 2,
+        "conditions": []
+      },
+      "status": "stub"
+    },
+    {
+      "id": "student-work",
+      "label": "Student Work or Feedback",
+      "description": "Any student-submitted work, evaluations, feedback data, or records that identify individual students.",
+      "applicableModes": ["teaching-ctl", "faculty-research"],
+      "routingRules": {
+        "defaultLayer": 5,
+        "conditions": [
+          {
+            "id": "ferpa-protected",
+            "label": "Contains student-identifiable information",
+            "layer": 5,
+            "recommendation": "restricted",
+            "message": "Student records are FERPA-protected. Never enter external AI tools. Aggregate or fully anonymized data may be routable — verify with your institution's FERPA officer before proceeding.",
+            "severity": "blocking"
+          }
+        ]
+      },
+      "status": "stub"
+    }
+  ]
+}

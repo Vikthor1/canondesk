@@ -1,0 +1,170 @@
+{
+  "meta": {
+    "workingName": "CanonDesk",
+    "brandingStatus": "provisional",
+    "version": "0.1.0-stub",
+    "note": "Mode 3 scenarios are active for the August demo. All other mode scenarios are stubs — schema is correct, content is placeholder."
+  },
+  "scenarios": [
+    {
+      "id": "mode3-briefing-memo",
+      "mode": "administrative",
+      "title": "Preparing a Briefing Memo",
+      "shortDescription": "Can I use AI to help draft a briefing memo from committee notes and draft policy language?",
+      "fullDescription": "A Faculty Affairs coordinator needs to prepare a briefing memo for an oversight committee. Available materials include recent committee meeting notes and a draft of revised policy language. Which materials can safely move into AI-assisted drafting?",
+      "materials": ["committee-notes", "draft-policy"],
+      "steps": [
+        {
+          "stepId": 1,
+          "action": "Route committee notes",
+          "question": "Do the committee notes contain personnel discussions, evaluation records, or references to individual faculty?",
+          "outcomes": {
+            "yes": {
+              "layer": 5,
+              "label": "Restricted",
+              "message": "These committee notes are restricted. They contain personnel content and cannot enter any external AI tool. Extract and set aside before proceeding.",
+              "nextStep": 2
+            },
+            "no": {
+              "layer": 2,
+              "label": "Policy Work in Progress",
+              "message": "Procedural committee notes are safe for AI assistance. Review before including in any packet. Confirm no personnel references are present.",
+              "nextStep": 2
+            }
+          }
+        },
+        {
+          "stepId": 2,
+          "action": "Route draft policy language",
+          "question": "Is this draft policy language in pre-approval status (not yet officially adopted)?",
+          "outcomes": {
+            "yes": {
+              "layer": 2,
+              "label": "Policy Work in Progress",
+              "message": "Draft policy language is safe for AI assistance with review. AI output cannot replace the official approval process.",
+              "nextStep": 3
+            },
+            "no": {
+              "layer": 1,
+              "label": "Official Record & Approved Policy",
+              "message": "This is approved policy — canonical record. Safe for AI reference and citation. Do not modify without completing the official approval process.",
+              "nextStep": 3
+            }
+          }
+        },
+        {
+          "stepId": 3,
+          "action": "Build Briefing & Communications Packet",
+          "description": "Assemble packet from approved, non-restricted materials only. Restricted materials are excluded.",
+          "packetInstructions": "Include only materials routed to Layer 1 or Layer 2. Do not include Layer 5 materials.",
+          "nextStep": 4
+        },
+        {
+          "stepId": 4,
+          "action": "Export governance summary",
+          "description": "Generate a governance summary recording the routing decisions made, materials included, and review status.",
+          "exportNote": "This summary can be attached to a governance file or presented to an oversight committee as documentation of responsible AI use."
+        }
+      ],
+      "demoNotes": "Primary August demo scenario. Should run end-to-end without errors. All routing messages must be clear to a non-technical Faculty Affairs user.",
+      "status": "active"
+    },
+    {
+      "id": "mode3-policy-routing",
+      "mode": "administrative",
+      "title": "Routing Governance Documents for a Summary Report",
+      "shortDescription": "Which governance documents from a recent review cycle can I use in an AI-assisted summary?",
+      "fullDescription": "A department chair needs to prepare a summary report of a recent governance review cycle. Available materials include officially adopted policy, committee meeting notes, and draft revisions. Which documents can safely support AI-assisted synthesis?",
+      "materials": ["approved-policy", "committee-notes", "draft-policy"],
+      "steps": [
+        {
+          "stepId": 1,
+          "action": "Identify and categorize each document",
+          "description": "Sort materials into three categories: officially adopted policy, committee notes, and draft language before routing.",
+          "nextStep": 2
+        },
+        {
+          "stepId": 2,
+          "action": "Route approved policy",
+          "outcomes": {
+            "default": {
+              "layer": 1,
+              "label": "Official Record & Approved Policy",
+              "message": "Approved policy is a canonical record. Safe for AI reference with attribution. Cite the source document when using AI to summarize or synthesize.",
+              "nextStep": 3
+            }
+          }
+        },
+        {
+          "stepId": 3,
+          "action": "Route committee notes",
+          "question": "Do the committee notes contain personnel discussions?",
+          "outcomes": {
+            "yes": {
+              "layer": 5,
+              "label": "Personnel Records & Confidential Files",
+              "message": "Restricted. Set aside entirely. Proceed with procedural notes only.",
+              "nextStep": 4
+            },
+            "no": {
+              "layer": 2,
+              "label": "Policy Work in Progress",
+              "message": "Procedural notes only — safe with review. Include in packet after confirming no personnel content.",
+              "nextStep": 4
+            }
+          }
+        },
+        {
+          "stepId": 4,
+          "action": "Route draft policy language",
+          "outcomes": {
+            "default": {
+              "layer": 2,
+              "label": "Policy Work in Progress",
+              "message": "Safe for AI assistance. Human review required before any language is used in official communications.",
+              "nextStep": 5
+            }
+          }
+        },
+        {
+          "stepId": 5,
+          "action": "Build packet and export summary",
+          "description": "Assemble packet from Layers 1 and 2 materials. Export governance summary documenting all routing decisions.",
+          "nextStep": null
+        }
+      ],
+      "demoNotes": "Secondary August demo scenario. Use if the primary scenario needs a follow-on example or if the audience wants to see multi-document routing.",
+      "status": "active"
+    },
+    {
+      "id": "mode1-grant-proposal",
+      "mode": "faculty-research",
+      "title": "Grant Proposal Preparation",
+      "shortDescription": "Which parts of my grant proposal package can safely move through AI tools?",
+      "fullDescription": "Stub — content to be developed in Week 3 or 4.",
+      "materials": ["manuscript-draft"],
+      "steps": [],
+      "status": "stub"
+    },
+    {
+      "id": "mode2-syllabus-revision",
+      "mode": "teaching-ctl",
+      "title": "Syllabus Revision with AI Assistance",
+      "shortDescription": "Can I use an AI tool to help revise my course syllabus?",
+      "fullDescription": "Stub — content to be developed in Week 3 or 4.",
+      "materials": ["syllabus"],
+      "steps": [],
+      "status": "stub"
+    },
+    {
+      "id": "mode4-tool-demo",
+      "mode": "tool-testing",
+      "title": "Testing a New AI Tool with Mock Materials",
+      "shortDescription": "How do I safely test a new AI tool before bringing it to a faculty workshop?",
+      "fullDescription": "Stub — content to be developed in Week 5 or 6.",
+      "materials": [],
+      "steps": [],
+      "status": "stub"
+    }
+  ]
+}

@@ -4,9 +4,9 @@
 
 ---
 
-## Current Phase: Project Scaffolding (Pre-Week 1)
+## Current Phase: Week 1 — Data Layer Complete
 
-### What Was Created Today (2026-05-26)
+### Scaffolding (2026-05-26 — Session 1)
 
 | File | Status |
 |---|---|
@@ -15,39 +15,59 @@
 | `SYSTEM_MEMORY.md` | Created (local only, not for git) |
 | `docs/session-status.md` | Created (this file) |
 | `docs/project-brief.md` | Created |
-| `docs/ai-scholar-architecture-roadmap.md` | Created — full roadmap from conversation |
+| `docs/ai-scholar-architecture-roadmap.md` | Created — full roadmap |
+| `.gitignore` | Created |
+| GitHub repo | Created and pushed: https://github.com/Vikthor1/canondesk (private) |
+| Obsidian layer | Initialized: `/Users/Victor1/Documents/Obsidian/Projects/CanonDesk/` (6 notes) |
 
-### What Was NOT Done (Intentional)
+### Week 1 Data Layer (2026-05-26 — Session 2)
 
-- No `index.html` — not yet.
-- No `assets/` directory — not yet.
-- No `assets/js/` files — not yet.
-- No `assets/css/styles.css` — not yet.
-- No `assets/data/*.json` — not yet.
-- GitHub repo created and pushed: https://github.com/Vikthor1/canondesk (private).
-- Obsidian layer initialized: `/Users/Victor1/Documents/Obsidian/Projects/CanonDesk/` (6 starter notes).
-- No backend, no API keys, no MCP, no external integrations.
-- No Tu Pana files modified.
+| File | Status |
+|---|---|
+| `docs/mvp-checkpoint.md` | Created — lean August MVP scope definition |
+| `assets/data/modes.json` | Created — all 4 modes; Mode 3 fully defined, Modes 1/2/4 stubbed |
+| `assets/data/rules.json` | Created — 6 layers + 4 Mode 3 material categories active; 3 stub categories |
+| `assets/data/glossary.json` | Created — 10 governance terms with mode-specific label overrides |
+| `assets/data/scenarios.json` | Created — 2 Mode 3 scenarios active; 3 stub scenarios for other modes |
+
+### Naming Status
+
+| Field | Value |
+|---|---|
+| `workingName` | `"CanonDesk"` |
+| `brandingStatus` | `"provisional"` |
+| Final name decision | Deferred — lock before any UI copy is written |
+| Config pattern | All JSON files carry `meta.workingName` + `meta.brandingStatus`; future `config.js` will expose `appName` as a global variable |
+
+---
+
+## What Is NOT Done (Intentional)
+
+- No `index.html` — Week 2
+- No `assets/js/` files — Week 2 (shell) and Week 3 (rules engine)
+- No `assets/css/styles.css` — Week 2
+- No backend, no API keys, no MCP, no external integrations
+- No Tu Pana files modified
 
 ---
 
 ## Next Recommended Steps
 
-### Immediate (before Week 1 build begins)
+### Week 2 Build Deliverables
 
-1. **Review the roadmap** — `docs/ai-scholar-architecture-roadmap.md`. Confirm or adjust working name (CanonDesk is provisional).
-2. **Initialize git** — `git init` inside `~/Sites/canondesk/`; create `.gitignore` that excludes `SYSTEM_MEMORY.md`.
-3. **Create GitHub repo** — public or private, under `Vikthor1`; push initial scaffold.
-4. **Name decision** — confirm CanonDesk, Provenance, or ScholarBridge before building any HTML.
+1. **HTML shell** — `index.html` with semantic structure, no content yet
+2. **Mode selector** — UI component for selecting one of four modes; persists to localStorage
+3. **Layer map** — visual governance layer display using Mode 3 vocabulary on load
+4. **`assets/js/config.js`** — exposes `appName`, `brandingStatus`, `FEATURES` flags (all `false`)
+5. **`assets/js/state.js`** — localStorage read/write for active mode and session state
+6. **`assets/css/styles.css`** — minimal, readable; no frameworks; accessible contrast
 
-### Week 1 Build Deliverables (roadmap §L)
+### Deferred to Week 3+
 
-- Draft six-layer governance model with vocabulary maps for all four modes
-- Write initial `assets/data/rules.json` (stub)
-- Write initial `assets/data/glossary.json` (stub)
-- Write initial `assets/data/modes.json` (stub)
-- Write initial `assets/data/scenarios.json` (stub)
-- Deliverable: Governance model document confirmed + all four JSON config stubs
+- Document / material router (Week 3) — depends on rules-engine.js
+- Scenario simulator (Week 4)
+- Packet builder (Week 5)
+- Export / governance summary (Week 4–5)
 
 ---
 
@@ -58,15 +78,17 @@
 | `~/Sites/canondesk/` is outside `~/Sites/tupana/` | ✓ Confirmed |
 | No Tu Pana files modified | ✓ Confirmed |
 | No Tu Pana source files copied | ✓ Confirmed |
+| Git root is `~/Sites/canondesk/` (not `~/`) | ✓ Confirmed |
 
 ---
 
 ## Open Decisions
 
-- [ ] Confirm final product name (CanonDesk / Provenance / ScholarBridge)
-- [ ] Confirm August demo audience and demo mode (roadmap recommends Mode 3 — Administrative / Faculty Affairs)
+- [ ] Confirm final product name (CanonDesk / Provenance / ScholarBridge) — lock before HTML copy is written
+- [x] Confirm August demo mode: Mode 3 — Administrative / Faculty Affairs (locked)
 - [x] GitHub repo created: https://github.com/Vikthor1/canondesk (private)
 - [x] Obsidian vault path confirmed and layer initialized
+- [x] Naming/config pattern established: `meta.workingName` + `meta.brandingStatus` in all JSON files; `config.appName` in future JS
 
 ---
 

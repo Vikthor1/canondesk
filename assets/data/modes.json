@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "workingName": "CanonDesk",
+    "brandingStatus": "provisional",
+    "version": "0.1.0-stub",
+    "note": "workingName is not final branding. UI must reference config.appName, not this string directly."
+  },
+  "modes": [
+    {
+      "id": "faculty-research",
+      "label": "Faculty / Research Workflow",
+      "shortLabel": "Faculty & Research",
+      "targetUser": "Faculty researchers, scholars",
+      "description": "For faculty and researchers managing manuscripts, grant proposals, literature reviews, and research working packets.",
+      "canonicalLayerLabel": "Published Work & Official Scholarship",
+      "layerVocabulary": {
+        "layer1": "Published Work & Official Scholarship",
+        "layer2": "Research Work in Progress",
+        "layer3": "Research Working Packet",
+        "layer4": "AI-Assisted Drafts",
+        "layer5": "Protected Research Data & Confidential Materials",
+        "layer6": "Conference Papers & Published Outputs"
+      },
+      "status": "stub"
+    },
+    {
+      "id": "teaching-ctl",
+      "label": "Teaching / CTL Workflow",
+      "shortLabel": "Teaching & CTL",
+      "targetUser": "CTL directors, faculty developers, instructional designers",
+      "description": "For CTL leaders and faculty developers managing syllabi, workshop materials, curriculum design, and course feedback.",
+      "canonicalLayerLabel": "Program Source Materials & Approved Curricula",
+      "layerVocabulary": {
+        "layer1": "Program Source Materials & Approved Curricula",
+        "layer2": "Course & Workshop Materials in Development",
+        "layer3": "Faculty Development Packet",
+        "layer4": "AI-Assisted Course Drafts",
+        "layer5": "Student Data & Protected Feedback",
+        "layer6": "Published Syllabi & Public Workshop Guides"
+      },
+      "status": "stub"
+    },
+    {
+      "id": "administrative",
+      "label": "Administrative / Faculty Affairs Workflow",
+      "shortLabel": "Administrative",
+      "targetUser": "Faculty Affairs coordinators, academic administrators, department chairs",
+      "description": "For administrators and Faculty Affairs staff managing policy documents, governance briefings, committee records, and institutional communications.",
+      "canonicalLayerLabel": "Official Record & Approved Policy",
+      "layerVocabulary": {
+        "layer1": "Official Record & Approved Policy",
+        "layer2": "Policy Work in Progress",
+        "layer3": "Briefing & Communications Packet",
+        "layer4": "AI-Assisted Drafts",
+        "layer5": "Personnel Records & Confidential Files",
+        "layer6": "Public Communications & Published Policy"
+      },
+      "status": "active"
+    },
+    {
+      "id": "tool-testing",
+      "label": "Tool Testing / AI Sandbox",
+      "shortLabel": "AI Sandbox",
+      "targetUser": "AI power users, scholar-developers, institutional evaluators",
+      "description": "For testing AI tools with sanitized mock materials, building governance demos, and piloting the governance model before institutional use.",
+      "canonicalLayerLabel": "Canonical Source Layer",
+      "layerVocabulary": {
+        "layer1": "Canonical Source Layer",
+        "layer2": "Working Context",
+        "layer3": "AI-Safe Packet",
+        "layer4": "AI Output / Drafting Space",
+        "layer5": "Restricted — Do Not Upload",
+        "layer6": "Public Output"
+      },
+      "status": "stub"
+    }
+  ]
+}
