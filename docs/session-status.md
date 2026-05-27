@@ -4,6 +4,34 @@
 
 ---
 
+## Patch 2 — Landing Screen + Mode Selector + State Persistence (2026-05-27 — Session 5)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/js/utils.js` | Created — `window.VC_UTILS`: `escHtml`, `setText`, `qs`, `qsa`, `formatCount` |
+| `assets/js/ui.js` | Created — `window.VC_UI`: `renderLandingScreen`, `renderModeSelector`, `renderAppShellError` |
+| `assets/js/app.js` | Refactored — initialization and event wiring only; `renderBootScreen` removed; helpers moved to `VC_UTILS` |
+| `assets/css/styles.css` | Extended — landing screen, hook questions, CTA buttons, mode grid, mode cards, error screen, responsive |
+| `index.html` | Updated — `utils.js` and `ui.js` added to script load order before `app.js` |
+
+**Script load order after Patch 2:**
+`config.js → state.js → data-loader.js → utils.js → ui.js → app.js`
+
+**Module boundary established:**
+- `utils.js` — pure helpers, no DOM rendering, `window.VC_UTILS`
+- `ui.js` — all DOM rendering, reads `VC_STATE` and `VC_DATA`, `window.VC_UI`
+- `app.js` — initialization and event wiring only
+
+**Mode selector:** Renders all four mode cards from `DATA.modes.modes`. Administrative mode visually distinguished with "Faculty Affairs demo path" badge and amber top border. Selected mode persists to localStorage via `VC_STATE.setMode()`.
+
+**Landing screen:** Shows app name, tagline, description, three hook questions, "Start with your role" CTA, disabled "How this works" placeholder (Patch 3), and disclaimer.
+
+**Next patch:** Patch 3 — Governance Reference Panel (optional, accessible via "How does this work?" link).
+
+---
+
 ## Pre-Patch-2 Architectural Stress Test (2026-05-27 — Session 4)
 
 **Status:** Complete.

@@ -310,7 +310,7 @@ footer[role="contentinfo"] {
   font-weight: var(--font-weight-semi);
 }
 
-/* --- Responsive -------------------------------------------------------------- */
+/* --- Responsive (Patch 1 — boot screen) --------------------------------------- */
 
 @media (max-width: 600px) {
   .container {
@@ -328,5 +328,346 @@ footer[role="contentinfo"] {
   .boot-counts {
     flex-direction: column;
     gap: var(--space-xs);
+  }
+}
+
+/* =============================================================================
+   Patch 2 — Landing Screen + Mode Selector
+   ============================================================================= */
+
+/* --- Screen base ------------------------------------------------------------- */
+
+.screen {
+  animation: screen-fade-in 0.15s ease both;
+}
+
+@keyframes screen-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Button variants ---------------------------------------------------------- */
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--color-header-bg);
+  color: #ffffff;
+  padding: var(--space-md) var(--space-xl);
+  font-size: var(--font-size-base);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-btn-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-ghost {
+  background: none;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.btn-secondary {
+  background: none;
+  color: var(--color-header-bg);
+  border: 1.5px solid var(--color-header-bg);
+  width: 100%;
+  margin-top: var(--space-md);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-header-bg);
+  color: #ffffff;
+}
+
+.btn-selected {
+  background-color: var(--color-safe-bg);
+  color: var(--color-safe);
+  border: 1px solid var(--color-safe-border);
+  width: 100%;
+  margin-top: var(--space-md);
+  font-weight: var(--font-weight-medium);
+}
+
+.btn-selected:hover {
+  background-color: var(--color-safe-bg);
+  box-shadow: none;
+}
+
+/* Reference placeholder */
+
+.btn-reference-placeholder {
+  gap: var(--space-sm);
+}
+
+.badge-coming {
+  font-size: var(--font-size-xs);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  padding: 2px var(--space-xs);
+  white-space: nowrap;
+}
+
+/* --- Landing screen ----------------------------------------------------------- */
+
+.landing-screen {
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.landing-brand {
+  margin-bottom: var(--space-lg);
+}
+
+.landing-app-name {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-header-bg);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-xs);
+}
+
+.landing-tagline {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.landing-description {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  line-height: var(--line-height-base);
+  margin-bottom: var(--space-xl);
+  max-width: 58ch;
+}
+
+/* Hook questions */
+
+.landing-hooks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.hook-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.hook-number {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-header-bg);
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
+.hook-text {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  line-height: var(--line-height-snug);
+  margin-top: 0.3rem;
+}
+
+/* CTA actions row */
+
+.landing-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.landing-disclaimer {
+  margin-top: 0;
+}
+
+/* --- Mode selector ------------------------------------------------------------ */
+
+.mode-selector-header {
+  margin-bottom: var(--space-xl);
+}
+
+.mode-selector-heading {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-header-bg);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-xs);
+}
+
+.mode-selector-heading:focus {
+  outline: none;
+}
+
+.mode-selector-sub {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+}
+
+/* Mode card grid */
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+/* Individual mode card */
+
+.mode-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.mode-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.mode-card--selected {
+  border-color: var(--color-header-bg);
+  box-shadow: 0 0 0 2px var(--color-header-bg);
+}
+
+.mode-card--recommended {
+  border-top: 3px solid #b45309;
+}
+
+.mode-card--recommended.mode-card--selected {
+  border-color: var(--color-header-bg);
+  box-shadow: 0 0 0 2px var(--color-header-bg);
+}
+
+/* Recommended badge */
+
+.mode-badge {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semi);
+  color: #92400e;
+  background-color: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  padding: 2px var(--space-sm);
+  margin-bottom: var(--space-sm);
+  align-self: flex-start;
+  letter-spacing: 0.01em;
+}
+
+/* Selected indicator */
+
+.mode-selected-indicator {
+  font-size: var(--font-size-xs);
+  color: var(--color-safe);
+  font-weight: var(--font-weight-semi);
+  margin-bottom: var(--space-xs);
+}
+
+.mode-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semi);
+  color: var(--color-text);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--space-xs);
+}
+
+.mode-card-user {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-bottom: var(--space-sm);
+}
+
+.mode-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: var(--line-height-base);
+  flex: 1;
+}
+
+/* mode-card-btn shares .btn base; .btn-secondary or .btn-selected provide the rest */
+
+/* Mode selector nav (back button row) */
+
+.mode-selector-nav {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* --- Error screen ------------------------------------------------------------- */
+
+.error-screen {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-xl);
+}
+
+.error-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semi);
+  color: var(--color-restricted);
+  margin-bottom: var(--space-md);
+}
+
+.error-message {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-family: monospace;
+  margin-bottom: var(--space-sm);
+}
+
+.error-hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* --- Responsive (Patch 2) ----------------------------------------------------- */
+
+@media (max-width: 600px) {
+  .landing-app-name {
+    font-size: var(--font-size-2xl);
+  }
+
+  .landing-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .mode-grid {
+    grid-template-columns: 1fr;
   }
 }
