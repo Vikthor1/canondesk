@@ -21,7 +21,7 @@
           "outcomes": {
             "yes": {
               "layer": 5,
-              "label": "Restricted",
+              "label": "Personnel Records & Confidential Files",
               "message": "These committee notes are restricted. They contain personnel content and cannot enter any external AI tool. Extract and set aside before proceeding.",
               "nextStep": 2
             },
