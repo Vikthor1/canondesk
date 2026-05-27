@@ -44,11 +44,6 @@
             '<button class="btn btn-primary" id="btn-start-role" type="button">' +
               'Start with your role' +
             '</button>' +
-            '<button class="btn btn-ghost btn-reference-placeholder" disabled type="button" ' +
-                'aria-label="Governance reference panel &#8212; available in Patch 3">' +
-              'How this works' +
-              '<span class="badge-coming" aria-hidden="true">Patch 3</span>' +
-            '</button>' +
           '</div>' +
 
           '<p class="disclaimer landing-disclaimer">' +

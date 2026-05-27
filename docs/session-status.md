@@ -26,7 +26,9 @@
 
 **Mode selector:** Renders all four mode cards from `DATA.modes.modes`. Administrative mode visually distinguished with "Faculty Affairs demo path" badge and amber top border. Selected mode persists to localStorage via `VC_STATE.setMode()`.
 
-**Landing screen:** Shows app name, tagline, description, three hook questions, "Start with your role" CTA, disabled "How this works" placeholder (Patch 3), and disclaimer.
+**Landing screen:** Shows app name, tagline, description, three hook questions, "Start with your role" CTA, and disclaimer.
+
+**Post-review micro-patch (2026-05-27):** Removed disabled "How this works" placeholder button — developer-facing "Patch 3" badge text was visible in the live UI. The functional trigger will be added in Patch 3 with the real reference panel.
 
 **Next patch:** Patch 3 — Governance Reference Panel (optional, accessible via "How does this work?" link).
 
