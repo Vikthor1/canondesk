@@ -396,7 +396,7 @@
           var scenarioId = btn.getAttribute('data-scenario-id');
           VC_STATE.setScenario(scenarioId);
           ctx.state = VC_STATE.getState();
-          VC_UI.renderScenarioPlaceholder(ctx, scenarioId);
+          VC_UI.renderMaterialRouter(ctx);
         });
       });
 
@@ -423,56 +423,166 @@
       if (heading) { heading.focus(); }
     },
 
-    /* ── Scenario placeholder (router coming next) ──────────────────────────── */
+    /* ── Material router ─────────────────────────────────────────────────────── */
 
-    renderScenarioPlaceholder: function (ctx, scenarioId) {
-      var root      = ctx.root;
-      var esc       = VC_UTILS.escHtml;
-      var scenarios = (ctx.data && ctx.data.scenarios && Array.isArray(ctx.data.scenarios.scenarios))
-        ? ctx.data.scenarios.scenarios : [];
+    renderMaterialRouter: function (ctx) {
+      var root  = ctx.root;
+      var state = VC_STATE.getState();
+      var esc   = VC_UTILS.escHtml;
+      var data  = ctx.data;
 
-      var scenario = null;
+      var scenarios = (data && data.scenarios && Array.isArray(data.scenarios.scenarios))
+        ? data.scenarios.scenarios : [];
+
+      var scenarioId = state.currentScenarioId;
+      var scenario   = null;
       for (var i = 0; i < scenarios.length; i++) {
         if (scenarios[i].id === scenarioId) { scenario = scenarios[i]; break; }
       }
+      var scenarioTitle = scenarioId === 'custom-material'
+        ? 'My own material'
+        : (scenario ? scenario.title : 'Selected scenario');
 
-      var titleText, descText;
-      if (scenarioId === 'custom-material') {
-        titleText = 'Describe my own material';
-        descText  = '';
-      } else if (scenario) {
-        titleText = scenario.title;
-        descText  = scenario.fullDescription;
-      } else {
-        titleText = 'Scenario selected';
-        descText  = '';
+      // Non-admin modes: stub notice
+      if (state.activeMode !== DEMO_MODE_ID) {
+        root.innerHTML =
+          '<div class="screen router-screen">' +
+            '<div class="router-header">' +
+              '<h2 class="router-heading" tabindex="-1">Route your material</h2>' +
+            '</div>' +
+            '<div class="scenario-stub-notice">' +
+              '<p>The material router is available for the <strong>Administrative / Faculty Affairs</strong> ' +
+              'demo path only in this prototype.</p>' +
+              '<p>Use the button below to return to role selection and try that workflow.</p>' +
+            '</div>' +
+            '<div class="router-nav">' +
+              '<button class="btn btn-ghost" id="btn-back-scenarios" type="button">' +
+                '&larr; Back to scenarios' +
+              '</button>' +
+            '</div>' +
+          '</div>';
+
+        var stubBackBtn = VC_UTILS.qs('#btn-back-scenarios', root);
+        if (stubBackBtn) {
+          stubBackBtn.addEventListener('click', function () {
+            VC_UI.renderScenarioSelector(ctx);
+          });
+        }
+        var stubHeading = VC_UTILS.qs('.router-heading', root);
+        if (stubHeading) { stubHeading.focus(); }
+        return;
+      }
+
+      // Build material category <select> options
+      var categories   = VC_RULES.getMaterialCategories(data, state.activeMode);
+      var catOptionsHtml = '<option value="">&#8212; Select a material type &#8212;</option>' +
+        categories.map(function (cat) {
+          return '<option value="' + esc(cat.id) + '">' + esc(cat.label) + '</option>';
+        }).join('');
+
+      // Build workflow route radios
+      var routeOptions    = VC_RULES.getWorkflowRouteOptions();
+      var routeRadiosHtml = routeOptions.map(function (opt) {
+        return '<label class="router-radio-label">' +
+            '<input type="radio" name="workflowRoute" value="' + esc(opt.id) + '"> ' +
+            esc(opt.label) +
+          '</label>';
+      }).join('');
+
+      function triOptions(name) {
+        return [
+          { val: 'yes',      label: 'Yes'      },
+          { val: 'no',       label: 'No'       },
+          { val: 'not-sure', label: 'Not sure' }
+        ].map(function (o) {
+          return '<label class="router-radio-label">' +
+              '<input type="radio" name="' + esc(name) + '" value="' + esc(o.val) + '"> ' +
+              esc(o.label) +
+            '</label>';
+        }).join('');
       }
 
       root.innerHTML =
-        '<div class="screen scenario-placeholder-screen">' +
-          '<div class="scenario-placeholder-header">' +
-            '<h2 class="scenario-placeholder-heading" tabindex="-1">Scenario selected</h2>' +
+        '<div class="screen router-screen">' +
+          '<div class="router-header">' +
+            '<h2 class="router-heading" tabindex="-1">Route your material</h2>' +
+            '<p class="router-scenario-context">Scenario: <strong>' + esc(scenarioTitle) + '</strong></p>' +
+            '<p class="router-sub">Answer the questions below to get a routing recommendation.</p>' +
           '</div>' +
-          '<div class="scenario-placeholder-card">' +
-            '<h3 class="scenario-placeholder-title">' + esc(titleText) + '</h3>' +
-            (descText ? '<p class="scenario-placeholder-desc">' + esc(descText) + '</p>' : '') +
-            '<div class="scenario-next-block">' +
-              '<p class="scenario-next-message">' +
-                'Next: the material router will ask what kind of material you are working ' +
-                'with and what you want AI to help you do.' +
-              '</p>' +
-              '<p class="scenario-next-note">' +
-                'The router is coming in the next build. Your scenario selection has been saved.' +
-              '</p>' +
+
+          '<form class="router-form" id="router-form" novalidate>' +
+
+            '<div class="router-form-group">' +
+              '<label class="router-label" for="router-material-cat">' +
+                'What type of material are you working with? <span aria-hidden="true">*</span>' +
+              '</label>' +
+              '<select class="router-select" id="router-material-cat" name="materialCategory" required>' +
+                catOptionsHtml +
+              '</select>' +
+              '<div class="router-error" id="router-cat-error" role="alert" hidden>' +
+                'Please select a material type before continuing.' +
+              '</div>' +
             '</div>' +
-          '</div>' +
-          '<div class="scenario-placeholder-nav">' +
+
+            '<fieldset class="router-fieldset">' +
+              '<legend class="router-label">What are you trying to use AI for?</legend>' +
+              '<div class="router-radio-group router-radio-group--inline">' +
+                routeRadiosHtml +
+              '</div>' +
+            '</fieldset>' +
+
+            '<fieldset class="router-fieldset">' +
+              '<legend class="router-label">' +
+                'Does this material contain personnel, hiring, evaluation, tenure, or grievance information?' +
+              '</legend>' +
+              '<div class="router-radio-group router-radio-group--inline">' +
+                triOptions('hasPersonnel') +
+              '</div>' +
+            '</fieldset>' +
+
+            '<fieldset class="router-fieldset">' +
+              '<legend class="router-label">' +
+                'Does this material contain student-identifiable information?' +
+              '</legend>' +
+              '<div class="router-radio-group router-radio-group--inline">' +
+                triOptions('hasStudentData') +
+              '</div>' +
+            '</fieldset>' +
+
+            '<fieldset class="router-fieldset">' +
+              '<legend class="router-label">' +
+                'Does this material contain confidential institutional, legal, financial, or committee deliberation information?' +
+              '</legend>' +
+              '<div class="router-radio-group router-radio-group--inline">' +
+                triOptions('hasConfidential') +
+              '</div>' +
+            '</fieldset>' +
+
+            '<fieldset class="router-fieldset">' +
+              '<legend class="router-label">' +
+                'Was any part of this material generated or significantly assisted by AI?' +
+              '</legend>' +
+              '<div class="router-radio-group router-radio-group--inline">' +
+                triOptions('isAiOutput') +
+              '</div>' +
+            '</fieldset>' +
+
+            '<div class="router-form-actions">' +
+              '<button class="btn btn-primary" type="submit" id="btn-router-submit">' +
+                'Get routing recommendation &#8594;' +
+              '</button>' +
+            '</div>' +
+
+          '</form>' +
+
+          '<div class="router-nav">' +
             '<button class="btn btn-ghost" id="btn-back-scenarios" type="button">' +
               '&larr; Back to scenarios' +
             '</button>' +
           '</div>' +
         '</div>';
 
+      // Wire back button
       var backBtn = VC_UTILS.qs('#btn-back-scenarios', root);
       if (backBtn) {
         backBtn.addEventListener('click', function () {
@@ -480,7 +590,133 @@
         });
       }
 
-      var heading = VC_UTILS.qs('.scenario-placeholder-heading', root);
+      // Wire form submit
+      var form = VC_UTILS.qs('#router-form', root);
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          var catSelect = VC_UTILS.qs('#router-material-cat', root);
+          var catError  = VC_UTILS.qs('#router-cat-error',    root);
+          if (!catSelect || !catSelect.value) {
+            if (catError)  { catError.hidden = false; }
+            if (catSelect) { catSelect.focus(); }
+            return;
+          }
+          if (catError) { catError.hidden = true; }
+
+          function getRadioVal(name, fallback) {
+            var checked = VC_UTILS.qs('input[name="' + name + '"]:checked', root);
+            return checked ? checked.value : (fallback || '');
+          }
+
+          var answers = {
+            materialCategory: catSelect.value,
+            workflowRoute:    getRadioVal('workflowRoute'),
+            hasPersonnel:     getRadioVal('hasPersonnel',    'not-sure'),
+            hasStudentData:   getRadioVal('hasStudentData',  'not-sure'),
+            hasConfidential:  getRadioVal('hasConfidential', 'not-sure'),
+            isAiOutput:       getRadioVal('isAiOutput',      'not-sure')
+          };
+
+          var result = VC_RULES.evaluateRouterAnswers(answers, data);
+          VC_STATE.setRouterResult(answers, result);
+          ctx.state = VC_STATE.getState();
+          VC_UI.renderRoutingInterim(ctx, result);
+        });
+      }
+
+      var heading = VC_UTILS.qs('.router-heading', root);
+      if (heading) { heading.focus(); }
+    },
+
+    /* ── Routing interim result ──────────────────────────────────────────────── */
+
+    renderRoutingInterim: function (ctx, result) {
+      var root = ctx.root;
+      var esc  = VC_UTILS.escHtml;
+
+      var recLabel = VC_RULES.getRecommendationLabel(result.recommendation);
+
+      var chipClass = {
+        'restricted':            'rec-chip--red',
+        'safe-with-review':      'rec-chip--amber',
+        'safe-with-attribution': 'rec-chip--blue',
+        'safe':                  'rec-chip--green'
+      }[result.recommendation] || '';
+
+      var routeOptions  = VC_RULES.getWorkflowRouteOptions();
+      var workflowLabel = '';
+      for (var i = 0; i < routeOptions.length; i++) {
+        if (routeOptions[i].id === result.workflowRoute) {
+          workflowLabel = routeOptions[i].label;
+          break;
+        }
+      }
+
+      var warningHtml = '';
+      if (result.warnings && result.warnings.length > 0) {
+        var extraCount = result.warnings.length - 1;
+        warningHtml =
+          '<div class="interim-warning">' +
+            '<p class="interim-warning-text">' + esc(result.warnings[0]) + '</p>' +
+            (extraCount > 0
+              ? '<p class="interim-warning-count">+ ' + extraCount +
+                  ' more warning' + (extraCount > 1 ? 's' : '') + '</p>'
+              : '') +
+          '</div>';
+      }
+
+      root.innerHTML =
+        '<div class="screen interim-result-screen">' +
+          '<div class="interim-result-header">' +
+            '<h2 class="interim-result-heading" tabindex="-1">Routing recommendation</h2>' +
+          '</div>' +
+
+          '<div class="interim-result-card">' +
+            '<div class="rec-chip ' + esc(chipClass) + '">' + esc(recLabel) + '</div>' +
+
+            (result.rationale
+              ? '<p class="interim-rationale">' + esc(result.rationale) + '</p>'
+              : '') +
+
+            (workflowLabel
+              ? '<p class="interim-workflow">AI task: <strong>' + esc(workflowLabel) + '</strong></p>'
+              : '') +
+
+            warningHtml +
+
+            '<p class="interim-next-note">' +
+              'The full result screen &#8212; with allowed actions, blocked actions, and review ' +
+              'guidance &#8212; is coming in the next build.' +
+            '</p>' +
+          '</div>' +
+
+          '<div class="interim-result-nav">' +
+            '<button class="btn btn-ghost" id="btn-back-router" type="button">' +
+              '&larr; Revise answers' +
+            '</button>' +
+            '<button class="btn btn-ghost" id="btn-back-scenarios-interim" type="button">' +
+              '&larr; Back to scenarios' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+
+      var backRouterBtn = VC_UTILS.qs('#btn-back-router', root);
+      if (backRouterBtn) {
+        backRouterBtn.addEventListener('click', function () {
+          VC_UI.renderMaterialRouter(ctx);
+        });
+      }
+
+      var backScenariosBtn = VC_UTILS.qs('#btn-back-scenarios-interim', root);
+      if (backScenariosBtn) {
+        backScenariosBtn.addEventListener('click', function () {
+          VC_UI.renderScenarioSelector(ctx);
+        });
+      }
+
+      var heading = VC_UTILS.qs('.interim-result-heading', root);
       if (heading) { heading.focus(); }
     },
 

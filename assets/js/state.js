@@ -6,6 +6,8 @@
       activeMode:        'administrative',
       decisions:         [],
       currentScenarioId: null,
+      routerAnswers:     null,
+      routingResult:     null,
       lastLoadedAt:      null
     };
   }
@@ -61,6 +63,12 @@
 
     setScenario: function (scenarioId) {
       _state.currentScenarioId = scenarioId;
+      window.VC_STATE.saveState();
+    },
+
+    setRouterResult: function (answers, result) {
+      _state.routerAnswers = answers;
+      _state.routingResult = result;
       window.VC_STATE.saveState();
     },
 

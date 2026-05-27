@@ -4,6 +4,37 @@
 
 ---
 
+## Patch 5 — Material Router and Rules Engine (2026-05-27 — Session 9)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/js/rules-engine.js` | Created — `window.VC_RULES`: `getWorkflowRouteOptions`, `getRecommendationLabel`, `getMaterialCategories`, `evaluateRouterAnswers` |
+| `assets/js/state.js` | Extended — `routerAnswers` and `routingResult` added to `defaultState()`; `setRouterResult(answers, result)` helper added after `setScenario` |
+| `assets/js/ui.js` | Extended — `renderScenarioPlaceholder` replaced with `renderMaterialRouter` and `renderRoutingInterim`; scenario selector click handler updated to call `renderMaterialRouter` |
+| `index.html` | Updated — `rules-engine.js` added to script load order before `ui.js` |
+| `assets/css/styles.css` | Extended — Patch 5 section: router screen, router form, fieldsets, radio groups, interim result screen, rec-chip variants, interim body, responsive block |
+| `docs/session-status.md` | Updated |
+
+**Script load order after Patch 5:**
+`config.js → state.js → data-loader.js → utils.js → rules-engine.js → ui.js → app.js`
+
+**What Patch 5 added:**
+
+- `rules-engine.js` — pure routing logic (no DOM, no state, no external calls). Conservative cascade: no-recursive-upload guard → personnel=yes (restricted) → student=yes (restricted) → not-sure escalation warning → confidential=yes (restricted) → material-category routing (personnel-records=restricted; committee-notes=restricted-or-safe-with-review; draft-policy=safe-with-review; approved-policy=safe-with-attribution; unknown=conservative default). Returns `{ recommendation, materialCategory, workflowRoute, warnings[], rationale, allowedActions[], blockedActions[], reviewPrompts[], nextStep }`.
+- `state.js` — `routerAnswers` and `routingResult` persisted to localStorage via `setRouterResult`.
+- `renderMaterialRouter(ctx)` — 6-question router form for admin mode (material category select + workflow route radios + 4 Yes/No/Not-sure sensitivity questions). Validates materialCategory required. Calls `VC_RULES.evaluateRouterAnswers`, persists result, navigates to `renderRoutingInterim`. Non-admin modes show stub notice.
+- `renderRoutingInterim(ctx, result)` — shows recommendation chip (color-coded: red/amber/blue/green), rationale, workflow task label, first warning with overflow count, interim note. Back-to-router and back-to-scenarios buttons.
+
+**Deferred (unchanged from Patch 4 notes):**
+- Patch 6 full Risk Result Screen (allowed/blocked action panels, authorship prompts, disclaimer)
+- Patch 8 governance-panel vocabulary polish
+
+**Next patch:** Patch 6 — Risk Result Screen (polished result screen replacing `renderRoutingInterim`).
+
+---
+
 ## Patch G0 — AI-Safe Packet Gate Architecture Documentation (2026-05-27 — Session 8)
 
 **Status:** Complete. Documentation only — no code, no JSON, no implementation.

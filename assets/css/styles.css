@@ -1168,3 +1168,296 @@ footer[role="contentinfo"] {
     padding: var(--space-lg);
   }
 }
+
+/* =============================================================================
+   Patch 5 — Material Router and Routing Interim Result
+   ============================================================================= */
+
+/* ── Router screen ─────────────────────────────────────────────────────────── */
+
+.router-screen {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.router-header {
+  margin-bottom: var(--space-xl);
+}
+
+.router-heading {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-sm);
+}
+
+.router-scenario-context {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-xs);
+}
+
+.router-sub {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* ── Router form ────────────────────────────────────────────────────────────── */
+
+.router-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.router-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.router-label {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+}
+
+.router-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  padding: var(--space-sm) var(--space-xl) var(--space-sm) var(--space-md);
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-md) center;
+}
+
+.router-select:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-color: var(--color-focus);
+}
+
+.router-error {
+  font-size: var(--font-size-sm);
+  color: var(--color-restricted);
+  font-weight: var(--font-weight-medium);
+  padding: var(--space-xs) 0;
+}
+
+/* ── Router fieldsets and radio groups ─────────────────────────────────────── */
+
+.router-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.router-fieldset > legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--space-sm);
+  padding: 0;
+}
+
+.router-fieldset > legend + * {
+  clear: both;
+}
+
+.router-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.router-radio-group--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
+}
+
+.router-radio-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.router-radio-label input[type="radio"] {
+  accent-color: var(--color-focus);
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Router form actions and navigation ─────────────────────────────────────── */
+
+.router-form-actions {
+  padding-top: var(--space-sm);
+}
+
+.router-nav {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── Interim result screen ──────────────────────────────────────────────────── */
+
+.interim-result-screen {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.interim-result-header {
+  margin-bottom: var(--space-xl);
+}
+
+.interim-result-heading {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+.interim-result-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ── Recommendation chip ────────────────────────────────────────────────────── */
+
+.rec-chip {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: 999px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semi);
+  line-height: 1.4;
+  max-width: fit-content;
+}
+
+.rec-chip--green {
+  background: var(--color-safe-bg);
+  color: var(--color-safe);
+  border: 1px solid var(--color-safe-border, var(--color-safe-bg));
+}
+
+.rec-chip--amber {
+  background: var(--color-review-bg);
+  color: var(--color-review);
+  border: 1px solid var(--color-review-border, var(--color-review-bg));
+}
+
+.rec-chip--blue {
+  background: var(--color-teal-bg);
+  color: var(--color-teal);
+  border: 1px solid var(--color-teal-border);
+}
+
+.rec-chip--red {
+  background: var(--color-restricted-bg);
+  color: var(--color-restricted);
+  border: 1px solid var(--color-restricted-border, var(--color-restricted-bg));
+}
+
+/* ── Interim result body ────────────────────────────────────────────────────── */
+
+.interim-rationale {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  line-height: var(--line-height-base);
+  margin: 0;
+}
+
+.interim-workflow {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.interim-warning {
+  background: var(--color-warning-bg, #fffbeb);
+  border: 1px solid var(--color-warning-border, #fde68a);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.interim-warning-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  margin: 0 0 var(--space-xs);
+  line-height: var(--line-height-base);
+}
+
+.interim-warning-text:last-child {
+  margin-bottom: 0;
+}
+
+.interim-warning-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+  font-style: italic;
+}
+
+.interim-next-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-md);
+  margin: 0;
+  font-style: italic;
+}
+
+/* ── Interim result navigation ──────────────────────────────────────────────── */
+
+.interim-result-nav {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+/* ── Patch 5 responsive ─────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .router-heading,
+  .interim-result-heading {
+    font-size: var(--font-size-xl);
+  }
+
+  .router-radio-group--inline {
+    flex-direction: column;
+  }
+
+  .interim-result-card {
+    padding: var(--space-lg);
+  }
+
+  .interim-result-nav {
+    flex-direction: column;
+  }
+}
