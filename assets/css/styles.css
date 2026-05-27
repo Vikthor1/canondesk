@@ -959,3 +959,212 @@ footer[role="contentinfo"] {
     gap: var(--space-xs);
   }
 }
+
+/* =============================================================================
+   Patch 4 — Scenario Selector
+   ============================================================================= */
+
+/* --- Mode card: full-width primary button ------------------------------------ */
+
+.mode-card .btn-primary {
+  width: 100%;
+  margin-top: var(--space-md);
+}
+
+/* --- Scenario selector screen ------------------------------------------------ */
+
+.scenario-selector-screen {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.scenario-selector-header {
+  margin-bottom: var(--space-xl);
+}
+
+.scenario-selector-heading {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-header-bg);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-xs);
+}
+
+.scenario-selector-heading:focus {
+  outline: none;
+}
+
+.scenario-selector-mode {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.scenario-selector-sub {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+}
+
+/* --- Scenario grid ----------------------------------------------------------- */
+
+.scenario-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+/* --- Scenario card ----------------------------------------------------------- */
+
+.scenario-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s ease;
+}
+
+.scenario-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.scenario-card--custom {
+  border-style: dashed;
+}
+
+.scenario-badge {
+  display: inline-block;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semi);
+  color: #92400e;
+  background-color: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  padding: 2px var(--space-sm);
+  margin-bottom: var(--space-sm);
+  letter-spacing: 0.01em;
+}
+
+.scenario-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semi);
+  color: var(--color-text);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--space-sm);
+}
+
+.scenario-card-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: var(--line-height-base);
+  margin-bottom: var(--space-md);
+}
+
+/* .scenario-select-btn uses .btn .btn-secondary */
+
+/* --- Stub notice ------------------------------------------------------------- */
+
+.scenario-stub-notice {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-base);
+}
+
+.scenario-stub-notice p + p {
+  margin-top: var(--space-sm);
+}
+
+/* --- Scenario selector nav --------------------------------------------------- */
+
+.scenario-selector-nav {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* --- Scenario placeholder screen -------------------------------------------- */
+
+.scenario-placeholder-screen {
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.scenario-placeholder-header {
+  margin-bottom: var(--space-lg);
+}
+
+.scenario-placeholder-heading {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-header-bg);
+  line-height: var(--line-height-tight);
+}
+
+.scenario-placeholder-heading:focus {
+  outline: none;
+}
+
+.scenario-placeholder-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  margin-bottom: var(--space-xl);
+}
+
+.scenario-placeholder-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semi);
+  color: var(--color-text);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--space-md);
+}
+
+.scenario-placeholder-desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: var(--line-height-base);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.scenario-next-block {
+  padding-top: var(--space-md);
+}
+
+.scenario-next-message {
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  line-height: var(--line-height-base);
+  margin-bottom: var(--space-sm);
+}
+
+.scenario-next-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.scenario-placeholder-nav {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* --- Responsive (Patch 4) ---------------------------------------------------- */
+
+@media (max-width: 600px) {
+  .scenario-selector-heading,
+  .scenario-placeholder-heading {
+    font-size: var(--font-size-xl);
+  }
+
+  .scenario-placeholder-card {
+    padding: var(--space-lg);
+  }
+}

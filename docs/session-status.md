@@ -4,6 +4,38 @@
 
 ---
 
+## Patch 4 — Scenario Selector (2026-05-27 — Session 7)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/js/state.js` | Extended — added `setScenario(scenarioId)` helper |
+| `assets/js/ui.js` | Extended — added `renderScenarioSelector`, `renderScenarioPlaceholder`; updated `renderModeSelector` to navigate to scenario selector on mode selection |
+| `assets/css/styles.css` | Extended — scenario selector screen, scenario cards, scenario badge, stub notice, scenario placeholder screen, responsive additions |
+| `docs/session-status.md` | Updated |
+
+**What Patch 4 added:**
+- `renderScenarioSelector(ctx)` — filters scenarios by active mode; renders active scenarios as cards; shows stub notice for non-admin modes; always shows "Describe my own material" card; wires "How this works" panel trigger and "Change role" back button
+- `renderScenarioPlaceholder(ctx, scenarioId)` — shows selected scenario title and full description; shows router-coming-next message; wires back button to scenario selector
+- `VC_STATE.setScenario(scenarioId)` — persists `currentScenarioId` to localStorage
+- `renderModeSelector` updated: clicking any mode card button now navigates directly to scenario selector; selected mode shows "Continue with this role →" (btn-primary), unselected modes show "Select this role" (btn-secondary)
+
+**Scenario selector behavior:**
+- Administrative mode: renders `mode3-briefing-memo` (primary demo badge) and `mode3-policy-routing` from scenarios.json; badge detected from `demoNotes` field
+- Non-admin modes (faculty-research, teaching-ctl, tool-testing): stub notice rendered; "Describe my own material" still available
+- "custom-material" sentinel persisted to `currentScenarioId` for the describe-own-material path
+
+**Governance reference panel:** Available and optional on scenario selector screen (own PANEL_ID / TRIGGER_ID pair). Deferred Patch 8 vocabulary items not touched.
+
+**Deferred to Patch 8 — governance panel vocabulary polish:**
+- Panel intro prose still uses generic vocabulary terms ("AI-safe packets", "trusted records") regardless of active mode — should dynamically reference mode-specific layer labels
+- Layer 4 rule note uses "trusted source layer" instead of the active mode's Layer 1 vocabulary (e.g., "Official Record & Approved Policy" for Administrative mode)
+
+**Next patch:** Patch 5 — Document / Material Router (`rules-engine.js` + questionnaire UI for Mode 3).
+
+---
+
 ## Patch 3 — Governance Reference Panel (2026-05-27 — Session 6)
 
 **Status:** Complete. Exit criterion met.

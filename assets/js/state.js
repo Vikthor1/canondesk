@@ -59,6 +59,11 @@
       window.VC_STATE.saveState();
     },
 
+    setScenario: function (scenarioId) {
+      _state.currentScenarioId = scenarioId;
+      window.VC_STATE.saveState();
+    },
+
     patch: function (fields) {
       Object.assign(_state, fields);
       window.VC_STATE.saveState();

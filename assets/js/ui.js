@@ -237,9 +237,9 @@
           ? '<div class="mode-selected-indicator" aria-live="polite">&#10003; Selected</div>'
           : '';
 
-        var btnClass  = 'btn mode-card-btn ' + (isSelected ? 'btn-selected' : 'btn-secondary');
-        var btnLabel  = isSelected ? '&#10003;&nbsp;Role selected' : 'Select this role';
-        var btnExtras = isSelected ? ' disabled aria-disabled="true"' : '';
+        var btnClass  = 'btn mode-card-btn ' + (isSelected ? 'btn-primary' : 'btn-secondary');
+        var btnLabel  = isSelected ? 'Continue with this role &#8594;' : 'Select this role';
+        var btnExtras = '';
 
         return '<div class="' + esc(cardClass) + '">' +
             badgeHtml +
@@ -274,22 +274,12 @@
           '</div>' +
         '</div>';
 
-      // Wire mode selection — skip disabled (already-selected) buttons
+      // Wire mode selection — navigates directly to scenario selector
       VC_UTILS.qsa('[data-mode-id]', root).forEach(function (btn) {
-        if (btn.disabled) { return; }
         btn.addEventListener('click', function () {
-          // Preserve panel open state across re-render
-          var panelEl      = VC_UTILS.qs('#' + PANEL_ID, root);
-          var panelWasOpen = panelEl && !panelEl.hidden;
-
           VC_STATE.setMode(btn.getAttribute('data-mode-id'));
           ctx.state = VC_STATE.getState();
-          VC_UI.renderModeSelector(ctx);
-
-          // Re-open with fresh vocabulary if it was open before re-render
-          if (panelWasOpen) {
-            VC_UI.openPanel(PANEL_ID, TRIGGER_ID, ctx, root);
-          }
+          VC_UI.renderScenarioSelector(ctx);
         });
       });
 
@@ -313,6 +303,185 @@
           VC_UI.renderLandingScreen(ctx);
         });
       }
+    },
+
+    /* ── Scenario selector ───────────────────────────────────────────────────── */
+
+    renderScenarioSelector: function (ctx) {
+      var root      = ctx.root;
+      var state     = VC_STATE.getState();
+      var esc       = VC_UTILS.escHtml;
+      var scenarios = (ctx.data && ctx.data.scenarios && Array.isArray(ctx.data.scenarios.scenarios))
+        ? ctx.data.scenarios.scenarios : [];
+      var modes     = (ctx.data && ctx.data.modes && Array.isArray(ctx.data.modes.modes))
+        ? ctx.data.modes.modes : [];
+
+      var PANEL_ID   = 'ref-panel-scenario';
+      var TRIGGER_ID = 'btn-how-works-scenario';
+
+      var activeMode = null;
+      for (var i = 0; i < modes.length; i++) {
+        if (modes[i].id === state.activeMode) { activeMode = modes[i]; break; }
+      }
+      var modeLabel = activeMode ? activeMode.label : state.activeMode;
+
+      var modeScenarios   = scenarios.filter(function (s) { return s.mode === state.activeMode; });
+      var activeScenarios = modeScenarios.filter(function (s) { return s.status === 'active'; });
+
+      var scenarioCardsHtml;
+      if (activeScenarios.length > 0) {
+        scenarioCardsHtml = activeScenarios.map(function (scenario) {
+          var isPrimary = !!(scenario.demoNotes &&
+            scenario.demoNotes.toLowerCase().indexOf('primary') === 0);
+          var badgeHtml = isPrimary
+            ? '<div class="scenario-badge">Primary demo scenario</div>'
+            : '';
+          return '<div class="scenario-card">' +
+              badgeHtml +
+              '<h3 class="scenario-card-title">' + esc(scenario.title) + '</h3>' +
+              '<p class="scenario-card-desc">' + esc(scenario.shortDescription) + '</p>' +
+              '<button class="btn btn-secondary scenario-select-btn" ' +
+                'data-scenario-id="' + esc(scenario.id) + '" type="button">' +
+                'Start this scenario' +
+              '</button>' +
+            '</div>';
+        }).join('');
+      } else {
+        scenarioCardsHtml =
+          '<div class="scenario-stub-notice">' +
+            '<p>This workflow is scaffolded for the prototype. The August demo path ' +
+            'currently focuses on <strong>Administrative / Faculty Affairs</strong> decisions.</p>' +
+            '<p>Use the button below to return to role selection and try that workflow.</p>' +
+          '</div>';
+      }
+
+      var customCardHtml =
+        '<div class="scenario-card scenario-card--custom">' +
+          '<h3 class="scenario-card-title">Describe my own material</h3>' +
+          '<p class="scenario-card-desc">' +
+            'Not sure which scenario fits? Describe what material you are working with ' +
+            'and what you want AI to help you do.' +
+          '</p>' +
+          '<button class="btn btn-secondary scenario-select-btn" ' +
+            'data-scenario-id="custom-material" type="button">' +
+            'Start with my own material' +
+          '</button>' +
+        '</div>';
+
+      root.innerHTML =
+        '<div class="screen scenario-selector-screen">' +
+          '<div class="scenario-selector-header">' +
+            '<h2 class="scenario-selector-heading" tabindex="-1">Choose a scenario</h2>' +
+            '<p class="scenario-selector-mode">' +
+              'Role: <strong>' + esc(modeLabel) + '</strong>' +
+            '</p>' +
+            '<p class="scenario-selector-sub">' +
+              'Select a scenario that matches your current task, or describe your own material.' +
+            '</p>' +
+          '</div>' +
+          '<div class="scenario-grid" id="scenario-grid">' +
+            scenarioCardsHtml +
+            customCardHtml +
+          '</div>' +
+          VC_UI.buildRefTriggerHtml(PANEL_ID, TRIGGER_ID) +
+          '<div class="scenario-selector-nav">' +
+            '<button class="btn btn-ghost" id="btn-back-roles" type="button">' +
+              '&larr; Change role' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+
+      VC_UTILS.qsa('.scenario-select-btn', root).forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var scenarioId = btn.getAttribute('data-scenario-id');
+          VC_STATE.setScenario(scenarioId);
+          ctx.state = VC_STATE.getState();
+          VC_UI.renderScenarioPlaceholder(ctx, scenarioId);
+        });
+      });
+
+      var trigger = VC_UTILS.qs('#' + TRIGGER_ID, root);
+      if (trigger) {
+        trigger.addEventListener('click', function () {
+          var panel = VC_UTILS.qs('#' + PANEL_ID, root);
+          if (panel && !panel.hidden) {
+            VC_UI.closePanel(PANEL_ID, TRIGGER_ID, root);
+          } else {
+            VC_UI.openPanel(PANEL_ID, TRIGGER_ID, ctx, root);
+          }
+        });
+      }
+
+      var backBtn = VC_UTILS.qs('#btn-back-roles', root);
+      if (backBtn) {
+        backBtn.addEventListener('click', function () {
+          VC_UI.renderModeSelector(ctx);
+        });
+      }
+
+      var heading = VC_UTILS.qs('.scenario-selector-heading', root);
+      if (heading) { heading.focus(); }
+    },
+
+    /* ── Scenario placeholder (router coming next) ──────────────────────────── */
+
+    renderScenarioPlaceholder: function (ctx, scenarioId) {
+      var root      = ctx.root;
+      var esc       = VC_UTILS.escHtml;
+      var scenarios = (ctx.data && ctx.data.scenarios && Array.isArray(ctx.data.scenarios.scenarios))
+        ? ctx.data.scenarios.scenarios : [];
+
+      var scenario = null;
+      for (var i = 0; i < scenarios.length; i++) {
+        if (scenarios[i].id === scenarioId) { scenario = scenarios[i]; break; }
+      }
+
+      var titleText, descText;
+      if (scenarioId === 'custom-material') {
+        titleText = 'Describe my own material';
+        descText  = '';
+      } else if (scenario) {
+        titleText = scenario.title;
+        descText  = scenario.fullDescription;
+      } else {
+        titleText = 'Scenario selected';
+        descText  = '';
+      }
+
+      root.innerHTML =
+        '<div class="screen scenario-placeholder-screen">' +
+          '<div class="scenario-placeholder-header">' +
+            '<h2 class="scenario-placeholder-heading" tabindex="-1">Scenario selected</h2>' +
+          '</div>' +
+          '<div class="scenario-placeholder-card">' +
+            '<h3 class="scenario-placeholder-title">' + esc(titleText) + '</h3>' +
+            (descText ? '<p class="scenario-placeholder-desc">' + esc(descText) + '</p>' : '') +
+            '<div class="scenario-next-block">' +
+              '<p class="scenario-next-message">' +
+                'Next: the material router will ask what kind of material you are working ' +
+                'with and what you want AI to help you do.' +
+              '</p>' +
+              '<p class="scenario-next-note">' +
+                'The router is coming in the next build. Your scenario selection has been saved.' +
+              '</p>' +
+            '</div>' +
+          '</div>' +
+          '<div class="scenario-placeholder-nav">' +
+            '<button class="btn btn-ghost" id="btn-back-scenarios" type="button">' +
+              '&larr; Back to scenarios' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+
+      var backBtn = VC_UTILS.qs('#btn-back-scenarios', root);
+      if (backBtn) {
+        backBtn.addEventListener('click', function () {
+          VC_UI.renderScenarioSelector(ctx);
+        });
+      }
+
+      var heading = VC_UTILS.qs('.scenario-placeholder-heading', root);
+      if (heading) { heading.focus(); }
     },
 
     /* ── Error screen ─────────────────────────────────────────────────────────── */
