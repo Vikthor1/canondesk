@@ -4,6 +4,40 @@
 
 ---
 
+## Patch 8B — Accessibility, UX, and Polish Remediation (2026-05-27 — Session 13)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/js/brand-icon.js` | Added `SVG_INNER_HDR` — full header-variant SVG with all 9 IDs suffixed `-hdr` (`vc-parchmentGlow-hdr`, etc.); all `url(#…)`, `href="#…"`, and `aria-labelledby` references updated accordingly. `getHeaderHtml()` now uses `SVG_INNER_HDR` to eliminate duplicate DOM IDs. |
+| `assets/js/ui.js` | M1: mode badge → "Recommended starting point"; scenario badge → "Suggested scenario"; two stub notices rewritten to user-facing copy. M4: `openPanel()` calls `closeBtn.focus()` after wiring. M6: landing description uses `esc(config.appName)` instead of hard-coded string. S1: same as M1 (copy fixes). S4: clipboard confirm message → "Copied to clipboard." S8: governance panel intro uses mode-specific `layerVocab.layer1–layer6`; h3 uses `modeLabel` not hard-coded app name. |
+| `assets/css/styles.css` | M3: `.btn` changed to `display: inline-flex; align-items: center; justify-content: center; min-height: 44px`. M5: `body.is-landing header[role="banner"] { padding: 4px 0; }` added. S7: removed entire `.interim-result-screen`, `.interim-result-*`, `.interim-rationale`, `.interim-workflow`, `.interim-warning*`, `.interim-next-note` block and `.interim-result-heading` media-query reference; removed `.rec-chip`, `.rec-chip--green`, `.rec-chip--amber`, `.rec-chip--blue`, `.rec-chip--red`. |
+| `index.html` | S3: `?v=0.1.0` cache-busting query string added to all 9 `<script>` tags and the `<link rel="stylesheet">` tag. |
+| `docs/session-status.md` | Updated |
+
+**What Patch 8B fixed:**
+
+- **M1 — Dev-facing copy removed**: Mode badge, scenario badge, and both stub notices now use user-facing language.
+- **M2 — Duplicate SVG IDs**: `getHeaderHtml()` uses `SVG_INNER_HDR` with `-hdr` suffixed IDs. Landing hero and header compact SVG can coexist in DOM without ID collisions.
+- **M3 — Touch targets**: All `.btn` elements meet WCAG 2.5.5 minimum (44×44 CSS px) via `inline-flex` + `min-height: 44px`.
+- **M4 — Governance panel focus**: `openPanel()` moves keyboard focus to the close button after panel opens; close button returns focus to trigger.
+- **M5 — Landing banner height**: Blue header stripe is visually minimal on landing (`padding: 4px 0`).
+- **M6 — Hard-coded app name**: Landing description now reads `config.appName` dynamically.
+- **S1 — Same as M1** (combined above).
+- **S3 — Cache busting**: All static assets versioned at `?v=0.1.0`.
+- **S4 — Clipboard message**: "Copied to clipboard." (was "Markdown copied.").
+- **S7 — Obsolete CSS removed**: Entire interim result screen block and all rec-chip variants removed (~90 lines).
+- **S8 — Governance vocab**: Panel intro and h3 title use active mode label and layer vocabulary.
+
+**Accessibility:**
+- Keyboard: focus management on panel open/close is now correct
+- Touch: all buttons meet 44px minimum
+- Duplicate IDs eliminated from DOM (SVG accessibility issue resolved)
+- Cache-busting ensures browsers load updated ARIA attributes
+
+---
+
 ## Patch V1B — Brand Hierarchy Refinement and Tagline Source Fix (2026-05-27 — Session 12)
 
 **Status:** Complete. Exit criterion met.

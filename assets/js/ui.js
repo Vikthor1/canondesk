@@ -72,14 +72,21 @@
           '</li>';
       }).join('');
 
+      var l1 = esc(layerVocab.layer1 || 'official records');
+      var l2 = esc(layerVocab.layer2 || 'working materials');
+      var l3 = esc(layerVocab.layer3 || 'working packets');
+      var l4 = esc(layerVocab.layer4 || 'AI-assisted drafts');
+      var l5 = esc(layerVocab.layer5 || 'restricted materials');
+      var l6 = esc(layerVocab.layer6 || 'public outputs');
+
       return '<div class="ref-panel-header">' +
-            '<h3 class="ref-panel-title">How Veritas Compass organizes AI-use decisions</h3>' +
+            '<h3 class="ref-panel-title">How ' + esc(modeLabel) + ' organizes AI-use decisions</h3>' +
             '<button class="ref-panel-close" id="btn-close-panel" type="button" ' +
                 'aria-label="Close governance reference panel">&times;</button>' +
           '</div>' +
           '<p class="ref-panel-intro">' +
-            'This model helps you distinguish trusted records, working materials, AI-safe packets, ' +
-            'AI-generated outputs, protected materials, and public outputs. ' +
+            'This reference helps you distinguish ' + l1 + ', ' + l2 + ', ' + l3 + ', ' +
+            l4 + ', ' + l5 + ', and ' + l6 + '. ' +
             'Showing vocabulary for: <strong>' + esc(modeLabel) + '</strong>.' +
           '</p>' +
           '<p class="ref-panel-note">' +
@@ -115,13 +122,14 @@
       panel.hidden    = false;
       if (trigger) { trigger.setAttribute('aria-expanded', 'true'); }
 
-      // Wire close button
+      // Wire close button and move focus into panel
       var closeBtn = VC_UTILS.qs('#btn-close-panel', panel);
       if (closeBtn) {
         closeBtn.addEventListener('click', function () {
           VC_UI.closePanel(panelId, triggerId, root);
           if (trigger) { trigger.focus(); }
         });
+        closeBtn.focus();
       }
     },
 
@@ -158,7 +166,7 @@
           '</div>' +
 
           '<p class="landing-description">' +
-            'Veritas Compass helps you decide what knowledge can safely move through AI tools, ' +
+            esc(config.appName) + ' helps you decide what knowledge can safely move through AI tools, ' +
             'what must stay protected, and what requires human review &#8212; before you act.' +
           '</p>' +
 
@@ -238,7 +246,7 @@
           (isRecommended ? ' mode-card--recommended' : '');
 
         var badgeHtml = isRecommended
-          ? '<div class="mode-badge">Faculty Affairs demo path</div>'
+          ? '<div class="mode-badge">Recommended starting point</div>'
           : '';
 
         var selectedHtml = isSelected
@@ -342,7 +350,7 @@
           var isPrimary = !!(scenario.demoNotes &&
             scenario.demoNotes.toLowerCase().indexOf('primary') === 0);
           var badgeHtml = isPrimary
-            ? '<div class="scenario-badge">Primary demo scenario</div>'
+            ? '<div class="scenario-badge">Suggested scenario</div>'
             : '';
           return '<div class="scenario-card">' +
               badgeHtml +
@@ -357,8 +365,8 @@
       } else {
         scenarioCardsHtml =
           '<div class="scenario-stub-notice">' +
-            '<p>This workflow is scaffolded for the prototype. The August demo path ' +
-            'currently focuses on <strong>Administrative / Faculty Affairs</strong> decisions.</p>' +
+            '<p>Scenarios for this role will be available soon. For now, use the ' +
+            '<strong>Administrative / Faculty Affairs</strong> workflow to try the full guided experience.</p>' +
             '<p>Use the button below to return to role selection and try that workflow.</p>' +
           '</div>';
       }
@@ -459,8 +467,8 @@
               '<h2 class="router-heading" tabindex="-1">Route your material</h2>' +
             '</div>' +
             '<div class="scenario-stub-notice">' +
-              '<p>The material router is available for the <strong>Administrative / Faculty Affairs</strong> ' +
-              'demo path only in this prototype.</p>' +
+              '<p>Material routing for this role is coming soon. Please select the ' +
+              '<strong>Administrative / Faculty Affairs</strong> role to use the full routing flow.</p>' +
               '<p>Use the button below to return to role selection and try that workflow.</p>' +
             '</div>' +
             '<div class="router-nav">' +
@@ -901,7 +909,7 @@
               'Download .md' +
             '</button>' +
             '<span class="summary-copy-confirm" id="summary-copy-confirm" ' +
-                'aria-live="polite" hidden>Markdown copied.</span>' +
+                'aria-live="polite" hidden>Copied to clipboard.</span>' +
           '</div>' +
 
           '<div class="summary-preview-container">' +
