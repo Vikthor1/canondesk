@@ -1700,3 +1700,108 @@ footer[role="contentinfo"] {
     flex-direction: column;
   }
 }
+
+/* =============================================================================
+   Patch 7 — Decision Summary / Export Screen
+   ============================================================================= */
+
+.summary-screen {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.summary-header {
+  margin-bottom: var(--space-xl);
+}
+
+.summary-heading {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0 0 var(--space-sm);
+}
+
+.summary-sub {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+  margin: 0;
+  line-height: var(--line-height-base);
+}
+
+/* ── Summary action bar ─────────────────────────────────────────────────────── */
+
+.summary-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-lg);
+}
+
+.summary-copy-confirm {
+  font-size: var(--font-size-sm);
+  color: var(--color-safe);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ── Markdown preview ───────────────────────────────────────────────────────── */
+
+.summary-preview-container {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-xl);
+  overflow-x: auto;
+  max-height: 28rem;
+  overflow-y: auto;
+}
+
+.summary-preview {
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas,
+    'DejaVu Sans Mono', monospace;
+  font-size: var(--font-size-sm);
+  line-height: 1.65;
+  color: var(--color-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* ── Reset section ──────────────────────────────────────────────────────────── */
+
+.summary-reset-section {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-lg);
+  margin-bottom: var(--space-xl);
+}
+
+.summary-reset-note {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin: var(--space-xs) 0 0;
+}
+
+/* ── Summary navigation ─────────────────────────────────────────────────────── */
+
+.summary-nav {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── Patch 7 responsive ─────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .summary-heading {
+    font-size: var(--font-size-xl);
+  }
+
+  .summary-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .summary-preview-container {
+    max-height: 20rem;
+  }
+}

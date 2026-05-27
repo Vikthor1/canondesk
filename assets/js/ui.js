@@ -809,6 +809,9 @@
           '</p>' +
 
           '<div class="result-nav">' +
+            '<button class="btn btn-primary" id="btn-view-summary" type="button">' +
+              'View decision summary &#8594;' +
+            '</button>' +
             '<button class="btn btn-ghost" id="btn-revise-router" type="button">' +
               '&larr; Revise answers' +
             '</button>' +
@@ -818,6 +821,13 @@
           '</div>' +
 
         '</div>';
+
+      var summaryBtn = VC_UTILS.qs('#btn-view-summary', root);
+      if (summaryBtn) {
+        summaryBtn.addEventListener('click', function () {
+          VC_UI.renderDecisionSummaryScreen(ctx);
+        });
+      }
 
       var reviseBtn = VC_UTILS.qs('#btn-revise-router', root);
       if (reviseBtn) {
@@ -834,6 +844,137 @@
       }
 
       var heading = VC_UTILS.qs('.result-heading', root);
+      if (heading) { heading.focus(); }
+    },
+
+    /* ── Decision summary / export screen ───────────────────────────────────── */
+
+    renderDecisionSummaryScreen: function (ctx) {
+      var root  = ctx.root;
+      var state = VC_STATE.getState();
+      var esc   = VC_UTILS.escHtml;
+
+      function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+
+      var markdown = VC_REPORTS.buildDecisionSummaryMarkdown({
+        config: ctx.config,
+        state:  state,
+        data:   ctx.data
+      });
+      var filename = VC_REPORTS.getSafeFilename();
+
+      root.innerHTML =
+        '<div class="screen summary-screen">' +
+
+          '<div class="summary-header">' +
+            '<h2 class="summary-heading" tabindex="-1">Decision summary</h2>' +
+            '<p class="summary-sub">' +
+              'This summary captures your routing session as an institutional artifact. ' +
+              'Copy or download it to include in governance records, workshop materials, ' +
+              'or follow-up documentation.' +
+            '</p>' +
+          '</div>' +
+
+          '<div class="summary-actions">' +
+            '<button class="btn btn-secondary" id="btn-copy-markdown" type="button">' +
+              'Copy Markdown' +
+            '</button>' +
+            '<button class="btn btn-secondary" id="btn-download-md" type="button">' +
+              'Download .md' +
+            '</button>' +
+            '<span class="summary-copy-confirm" id="summary-copy-confirm" ' +
+                'aria-live="polite" hidden>Markdown copied.</span>' +
+          '</div>' +
+
+          '<div class="summary-preview-container">' +
+            '<pre class="summary-preview" id="summary-preview">' + esc(markdown) + '</pre>' +
+          '</div>' +
+
+          '<div class="summary-reset-section">' +
+            '<button class="btn btn-ghost" id="btn-reset-session" type="button">' +
+              'Reset session' +
+            '</button>' +
+            '<p class="summary-reset-note">' +
+              'Clears the current role, scenario, router answers, and recommendation from this browser.' +
+            '</p>' +
+          '</div>' +
+
+          '<div class="summary-nav">' +
+            '<button class="btn btn-ghost" id="btn-back-result" type="button">' +
+              '&larr; Back to result' +
+            '</button>' +
+          '</div>' +
+
+        '</div>';
+
+      // Copy Markdown
+      var copyBtn     = VC_UTILS.qs('#btn-copy-markdown',   root);
+      var copyConfirm = VC_UTILS.qs('#summary-copy-confirm', root);
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(markdown).then(function () {
+              if (copyConfirm) {
+                copyConfirm.hidden = false;
+                setTimeout(function () { copyConfirm.hidden = true; }, 2500);
+              }
+            }, function () {
+              fallbackCopy(markdown);
+            });
+          } else {
+            fallbackCopy(markdown);
+          }
+        });
+      }
+
+      // Download .md
+      var downloadBtn = VC_UTILS.qs('#btn-download-md', root);
+      if (downloadBtn) {
+        downloadBtn.addEventListener('click', function () {
+          VC_REPORTS.downloadMarkdown(filename, markdown);
+        });
+      }
+
+      // Reset session
+      var resetBtn = VC_UTILS.qs('#btn-reset-session', root);
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function () {
+          var confirmed = window.confirm(
+            'Reset this session? This clears the current role, scenario, router answers, ' +
+            'and recommendation from this browser.'
+          );
+          if (confirmed) {
+            VC_STATE.resetState();
+            ctx.state = VC_STATE.getState();
+            VC_UI.renderLandingScreen(ctx);
+          }
+        });
+      }
+
+      // Back to result
+      var backBtn = VC_UTILS.qs('#btn-back-result', root);
+      if (backBtn) {
+        backBtn.addEventListener('click', function () {
+          var savedResult = VC_STATE.getState().routingResult;
+          if (savedResult) {
+            VC_UI.renderRiskResultScreen(ctx, savedResult);
+          } else {
+            VC_UI.renderScenarioSelector(ctx);
+          }
+        });
+      }
+
+      var heading = VC_UTILS.qs('.summary-heading', root);
       if (heading) { heading.focus(); }
     },
 

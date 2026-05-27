@@ -4,6 +4,37 @@
 
 ---
 
+## Patch 7 — Decision Summary Export (2026-05-27 — Session 11)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/js/report-builder.js` | Created — `window.VC_REPORTS`: `buildDecisionSummaryMarkdown(ctx)`, `getSafeFilename()`, `downloadMarkdown(filename, markdown)` |
+| `index.html` | Updated — `report-builder.js` added to script load order before `ui.js` |
+| `assets/js/ui.js` | Extended — "View decision summary →" button added to result screen nav; `renderDecisionSummaryScreen(ctx)` added |
+| `assets/css/styles.css` | Extended — Patch 7 section: summary screen layout, action bar, Markdown preview, reset section, navigation, responsive block |
+| `docs/session-status.md` | Updated |
+
+**Script load order after Patch 7:**
+`config.js → state.js → data-loader.js → utils.js → rules-engine.js → report-builder.js → ui.js → app.js`
+
+**What Patch 7 added:**
+
+- `report-builder.js` — pure computation, no DOM access except `downloadMarkdown`. `buildDecisionSummaryMarkdown` assembles a Markdown decision summary from session state: mode, scenario, material category, AI task, recommendation label, rationale, warnings, allowed actions, blocked actions, review prompts, authorship/judgment checkpoint, working packet guidance (conditional on recommendation), important notes (no document uploaded, user-answer basis, human review required). Uses `VC_RULES.getWorkflowRouteOptions()` for workflow label lookup. Returns a string; does not access localStorage, external services, or DOM.
+- `renderDecisionSummaryScreen(ctx)` — shows a Markdown preview in a scrollable `<pre>` block; "Copy Markdown" button (navigator.clipboard with execCommand fallback); "Download .md" button (Blob download via temporary anchor); "Reset session" button with `window.confirm()` prompt that calls `VC_STATE.resetState()` and returns to landing; "← Back to result" button that reloads the result screen from saved `routingResult`.
+- "View decision summary →" button added as `btn-primary` to the result screen nav.
+
+**Not built (confirmed absent):**
+- No packet checklist or packet builder
+- No AI-Safe Packet Gate implementation
+- No live AI, file upload, backend, MCP, Gemini, Ollama, or provider routing
+- No document sanitization or redaction
+
+**Next patch:** Patch 8 — Accessibility, Polish, and Responsive Design (WCAG 2.1 AA audit, governance-panel vocabulary polish deferred from Patch 4, keyboard navigation, Lighthouse pass). Alternatively, Patch 9 GitHub Pages Deploy if demo is imminent.
+
+---
+
 ## Patch 6 — Risk Result Screen (2026-05-27 — Session 10)
 
 **Status:** Complete. Exit criterion met.
