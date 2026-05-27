@@ -143,6 +143,8 @@
       var PANEL_ID   = 'ref-panel-landing';
       var TRIGGER_ID = 'btn-how-works-landing';
 
+      document.body.classList.add('is-landing');
+
       root.innerHTML =
         '<div class="screen landing-screen">' +
 
@@ -216,6 +218,8 @@
     /* ── Mode selector ────────────────────────────────────────────────────────── */
 
     renderModeSelector: function (ctx) {
+      document.body.classList.remove('is-landing');
+
       var root  = ctx.root;
       var modes = (ctx.data && ctx.data.modes && Array.isArray(ctx.data.modes.modes))
         ? ctx.data.modes.modes : [];
@@ -985,6 +989,8 @@
     /* ── Error screen ─────────────────────────────────────────────────────────── */
 
     renderAppShellError: function (error) {
+      document.body.classList.remove('is-landing');
+
       var root = document.getElementById('app-root');
       if (!root) { return; }
       var esc = VC_UTILS.escHtml;

@@ -11,6 +11,10 @@
     VC_UTILS.setText('footer-app-name', VC_CONFIG.appName);
     VC_UTILS.setText('footer-version',  'v' + VC_CONFIG.version);
 
+    // Inject compact brand icon into header (hidden on landing via body.is-landing CSS)
+    var headerIconWrap = document.getElementById('header-icon-wrap');
+    if (headerIconWrap) { headerIconWrap.innerHTML = VC_BRAND_ICON.getHeaderHtml(); }
+
     // Restore persisted state
     VC_STATE.loadState();
 

@@ -4,6 +4,40 @@
 
 ---
 
+## Patch V1B — Brand Hierarchy Refinement and Tagline Source Fix (2026-05-27 — Session 12)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/js/brand-icon.js` | Refactored — separated `SVG_INNER` from wrapper string; added `getHeaderHtml()` returning compact variant (`icon-shell--compact`, `aria-hidden="true"`) |
+| `index.html` | Updated — `<body class="is-landing">` prevents flash; meta description updated to new tagline; `#header-icon-wrap` slot added; app name + tagline wrapped in `.header-brand-text` |
+| `assets/js/app.js` | Updated — header icon injected via `VC_BRAND_ICON.getHeaderHtml()` on boot |
+| `assets/js/ui.js` | Updated — `renderLandingScreen` adds `body.is-landing`; `renderModeSelector` removes it; `renderAppShellError` removes it |
+| `assets/css/styles.css` | Extended — Patch V1B section: landing banner retained as structural frame; `.header-brand` content suppressed on landing (`visibility: hidden`) to avoid duplicate branding; compact header icon enlarged (56/48/40px) on non-landing screens; skip-link suppressed on landing; header row layout; `.header-brand-text`; `.icon-shell--compact`; animation suppression; responsive compact sizes |
+| `docs/session-status.md` | Updated |
+
+**What Patch V1B fixed:**
+
+- **Tagline display**: `VC_CONFIG.tagline` was already correct after V1. Header and landing both read `config.tagline`. Any "missing" display was a browser cache issue; source is confirmed correct.
+- **Duplicate brand on landing**: `body.is-landing` class added to `<body>` in HTML and managed by `renderLandingScreen`/`renderModeSelector`. CSS hides the blue header on landing only. Header reappears on all subsequent screens.
+- **Compact header icon**: `getHeaderHtml()` added to `brand-icon.js`. Returns the same SVG wrapped in `.icon-shell--compact`. All CSS animations suppressed on compact variant. Size: 36px desktop, 28px mobile. Injected into `#header-icon-wrap` in `app.js` on boot. Marked `aria-hidden="true"` (decorative; header text is the accessible label).
+
+**Accessibility:**
+- Landing hero icon: `role="img"` + `aria-labelledby="vc-svg-title vc-svg-desc"` (unchanged)
+- Header compact icon: `aria-hidden="true"` — decorative; header text provides identity
+- Skip link hidden on landing (nothing to skip when header is absent)
+- `prefers-reduced-motion` suppression unchanged
+
+**Not built (confirmed absent):**
+- No routing, result, or export logic changed
+- No new workflow features
+- No live AI, backend, file upload, MCP, or AI-Safe Packet Gate
+
+**Next patch:** Patch 8A — Accessibility, Polish, and Responsive Design (WCAG 2.1 AA audit, governance-panel vocabulary polish, keyboard navigation, Lighthouse pass).
+
+---
+
 ## Patch V1 — Dynamic Brand Icon (2026-05-27 — Session 12)
 
 **Status:** Complete. Exit criterion met.

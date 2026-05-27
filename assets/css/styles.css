@@ -1991,3 +1991,74 @@ footer[role="contentinfo"] {
       inset 0 1px 0 rgba(255, 255, 255, 0.92);
   }
 }
+
+/* =============================================================================
+   Patch V1B — Brand Hierarchy Refinement and Tagline Source Fix
+   ============================================================================= */
+
+/* ── Landing screen: suppress persistent header ──────────────────────────────── */
+
+body.is-landing .header-brand {
+  visibility: hidden;
+}
+
+body.is-landing .skip-link {
+  display: none;
+}
+
+/* ── Header layout: icon mark + text side by side ────────────────────────────── */
+
+.header-brand {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.header-brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Compact header icon ─────────────────────────────────────────────────────── */
+
+.icon-shell--compact {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  box-shadow:
+    0 2px 8px var(--vc-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.icon-shell--compact .vc-icon {
+  filter: none;
+}
+
+/* Suppress all animations in the compact header context */
+.icon-shell--compact .astrolabe-ring,
+.icon-shell--compact .gear-ring,
+.icon-shell--compact .needle,
+.icon-shell--compact .glass-shimmer,
+.icon-shell--compact .decision-node,
+.icon-shell--compact .rim-glint,
+.icon-shell--compact .parchment-field,
+.icon-shell--compact::before {
+  animation: none;
+}
+
+/* ── Responsive: compact header on narrow viewports ─────────────────────────── */
+
+@media (max-width: 768px) {
+  .icon-shell--compact {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 600px) {
+  .icon-shell--compact {
+    width: 40px;
+    height: 40px;
+  }
+}
