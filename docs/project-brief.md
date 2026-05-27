@@ -126,6 +126,8 @@ A demo-ready proof-of-concept deployed to GitHub Pages, demonstrating the govern
 
 This prototype is a decision-support and governance-training tool. It is not legal advice. It is not an official compliance system. It does not claim to satisfy FERPA, HIPAA, or any other regulatory requirement. All governance recommendations are based on general institutional best practices and are subject to human review.
 
+Veritas Compass does not process sensitive documents. It does not sanitize, redact, or de-identify materials. It does not certify that any material is compliant, de-identified, legally safe, or cleared for AI use. Veritas Compass guides users before they interact with AI tools — the guidance itself is the product. A future AI-Safe Packet Gate module may help institutions develop local or approved workflows for preparing human-reviewed AI-safe working packets, but that module is not part of the public prototype, and any AI-assisted sanitization within it must be institution-implemented in a local or institutionally approved environment.
+
 ---
 
 ## Obsidian Project Memory Layer

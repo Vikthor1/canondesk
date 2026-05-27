@@ -4,6 +4,34 @@
 
 ---
 
+## Patch G0 — AI-Safe Packet Gate Architecture Documentation (2026-05-27 — Session 8)
+
+**Status:** Complete. Documentation only — no code, no JSON, no implementation.
+
+| File | Action |
+|---|---|
+| `docs/mid-august-development-plan.md` | Extended — AI-Safe Packet Gate added as deferred module in §9 (after Workflow Route) and as a new row in §11 deferred features table |
+| `docs/mvp-checkpoint.md` | Extended — four items added to out-of-scope list with pointer to architecture doc |
+| `docs/project-brief.md` | Extended — product-positioning paragraph added to "What This Is Not" |
+| `docs/session-status.md` | Updated |
+| `docs/future-ai-safe-packet-gate.md` | Created — full architecture reference for deferred AI-Safe Packet Gate module |
+
+**Decisions recorded:**
+- AI-Safe Packet Gate is a deferred future module, not part of the mid-August MVP
+- Veritas Compass does not process, upload, sanitize, or de-identify source documents in the public prototype
+- The app must never claim a document is compliant, de-identified, legally safe, or cleared for AI use
+- Three implementation tiers: Tier 1 = browser-local deterministic preflight (no AI, no backend, v1.5 earliest); Tier 2 = institution-implemented local AI sanitizer; Tier 3 = institution-approved cloud AI sanitizer
+- Any AI-assisted sanitization must be institution-implemented in a local or approved environment
+- Patch 5–6 router/result screens may include "Create an AI-safe working packet first" as guidance text only — no gate functionality
+- Prompt templates are documentation-only (Patch G3, future); no live AI or sanitizer logic is planned for the public prototype
+- Patch G3 (not yet run) will create `docs/ai-safe-packet-prompt-templates.md` with institution-adaptable templates
+
+**No code files modified. No JSON files modified. No sanitizer, AI call, file upload, backend, MCP, or provider routing implemented.**
+
+**Next patch:** Patch 5 — Document / Material Router (`assets/js/rules-engine.js` + questionnaire UI).
+
+---
+
 ## Patch 4 — Scenario Selector (2026-05-27 — Session 7)
 
 **Status:** Complete. Exit criterion met.

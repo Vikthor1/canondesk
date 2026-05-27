@@ -444,6 +444,8 @@ The prototype is built for a solo developer and a mid-August demo. It must also 
 
 **Workflow Route concept (planned future dimension — not a v1 screen):** A second routing axis that will ask "What are you trying to use AI for?" alongside the existing "What material do you have?" question. This will guide AI task-type appropriateness (summarizing vs. drafting vs. analyzing vs. generating), output status designation (draft, summary, recommendation, or official record), and required human review checkpoints. The concept is seeded in the step logic of `assets/data/scenarios.json`. Veritas Compass guides users *before* they use an AI tool — it is not a multi-LLM orchestration system and must never be positioned as one. The Workflow Route adds depth to the governance model without adding AI provider calls or live routing across systems.
 
+**AI-Safe Packet Gate (future module — deferred beyond mid-August MVP):** A future workflow that helps users prepare a human-reviewed AI-safe working packet before using any external AI tool. It does not process, upload, or sanitize source documents. It guides users through identifying what must be removed, generalized, summarized, or held back before assembling a working packet. Any AI-assisted sanitization is institution-implemented in a local or institutionally approved environment — not performed by the public prototype. Three implementation tiers are planned: Tier 1 = browser-local deterministic preflight (no AI, no backend, v1.5); Tier 2 = institution-implemented local AI sanitizer using an institutionally governed model; Tier 3 = institution-approved cloud AI sanitizer requiring explicit data-governance approval. The Patch 5–6 router and result screens may include "Create an AI-safe working packet first" as a text recommendation only — the gate itself is not built. Full architecture documented in `docs/future-ai-safe-packet-gate.md`. **Not part of the mid-August MVP.**
+
 **What must not be added before the August demo,** regardless of how reasonable it sounds:
 
 - Custom institutional vocabulary configuration panel
@@ -505,6 +507,7 @@ These must not be built before the August demo. If scope pressure mounts, this l
 | Bilingual interface | Architecture should support it; implementation is post-August |
 | Institutional configuration panel | v2+ feature |
 | SaaS packaging or pricing | Not relevant before the pilot succeeds |
+| AI-Safe Packet Gate | Browser-local preflight (Tier 1, v1.5), institution-implemented local AI sanitizer (Tier 2), institution-approved cloud sanitizer (Tier 3) — all deferred beyond mid-August MVP; full architecture in `docs/future-ai-safe-packet-gate.md` |
 
 ---
 

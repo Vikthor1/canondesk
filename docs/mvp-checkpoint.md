@@ -78,6 +78,12 @@ These items will not appear in any v1 file, JSON stub, or Week 1 deliverable:
 - MCP integration
 - Legal compliance certification or FERPA/HIPAA assertions
 - Enterprise packaging
+- AI-Safe Packet Gate or document sanitization workflow
+- Document upload or sensitive-document processing of any kind by the app
+- Live AI sanitization or AI-assisted redaction in the public prototype
+- Any claim that a document or output has been de-identified, sanitized, compliant, or cleared for AI use
+
+The mid-August MVP is decision-support only. See `docs/future-ai-safe-packet-gate.md` for the deferred architecture.
 
 ---
 
