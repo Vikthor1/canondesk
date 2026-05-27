@@ -4,7 +4,7 @@
   window.VC_CONFIG = {
     appName:         'Veritas Compass',
     formerWorkingName: 'CanonDesk',
-    tagline:         'An AI workflow guide for privacy, authorship, and academic judgment',
+    tagline:         'Your true north for privacy, authorship, and academic judgment.',
     version:         '0.1.0',
     storageKey:      'veritas_compass_state_v1',
     defaultMode:     'administrative',

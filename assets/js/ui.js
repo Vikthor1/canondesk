@@ -146,6 +146,10 @@
       root.innerHTML =
         '<div class="screen landing-screen">' +
 
+          '<div class="landing-icon-wrap" aria-hidden="true">' +
+            VC_BRAND_ICON.getHtml() +
+          '</div>' +
+
           '<div class="landing-brand">' +
             '<h1 class="landing-app-name">' + esc(config.appName) + '</h1>' +
             '<p class="landing-tagline">' + esc(config.tagline) + '</p>' +

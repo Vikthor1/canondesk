@@ -4,6 +4,40 @@
 
 ---
 
+## Patch V1 — Dynamic Brand Icon (2026-05-27 — Session 12)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/js/brand-icon.js` | Created — `window.VC_BRAND_ICON`: `getHtml()` returns `.icon-shell` wrapper + inline SVG with all IDs prefixed `vc-` |
+| `index.html` | Updated — `brand-icon.js` added to script load order between `report-builder.js` and `ui.js` |
+| `assets/js/ui.js` | Extended — `renderLandingScreen` inserts `<div class="landing-icon-wrap" aria-hidden="true">` before `.landing-brand` |
+| `assets/css/styles.css` | Extended — Patch V1 section: `--vc-*` color tokens, `.landing-icon-wrap`, `.icon-shell` + `::before`, `.vc-icon`, animation classes, all `@keyframes`, reduced-motion and light-mode media queries |
+| `docs/session-status.md` | Updated |
+
+**Script load order after Patch V1:**
+`config.js → state.js → data-loader.js → utils.js → rules-engine.js → report-builder.js → brand-icon.js → ui.js → app.js`
+
+**What Patch V1 added:**
+
+- `brand-icon.js` — pure data module, no DOM access. Stores a single ICON_HTML string (`.icon-shell` div + fully self-contained SVG). All SVG internal IDs prefixed `vc-` to avoid page-level conflicts (`vc-parchmentGlow`, `vc-glassLens`, `vc-brassStroke`, `vc-needleMetal`, `vc-copperLine`, `vc-softDrop`, `vc-gearTooth`). `aria-labelledby` updated to `vc-svg-title vc-svg-desc`. Exposes `window.VC_BRAND_ICON.getHtml()`.
+- Landing screen now renders the animated astrolabe icon above the app name/tagline.
+- Icon wrapper marked `aria-hidden="true"` (SVG carries its own `role="img"` + title/desc accessibility).
+- `prefers-reduced-motion: reduce` disables all CSS animations.
+- Light mode (`prefers-color-scheme: light`) adapts `.icon-shell` background/shadow to work on light backgrounds.
+- Icon scales responsively: `clamp(140px, 30vw, 220px)` — compact at mobile, larger at desktop.
+
+**Not built (confirmed absent):**
+- No standalone demo page or layout replacement
+- No external assets, remote fonts, or icon libraries
+- No changes to routing logic, rules engine, or report builder
+- No new workflow features
+
+**Next patch:** Patch 8 — Accessibility, Polish, and Responsive Design (WCAG 2.1 AA audit, governance-panel vocabulary polish, keyboard navigation, Lighthouse pass). Alternatively, Patch 9 GitHub Pages Deploy if demo is imminent.
+
+---
+
 ## Patch 7 — Decision Summary Export (2026-05-27 — Session 11)
 
 **Status:** Complete. Exit criterion met.
