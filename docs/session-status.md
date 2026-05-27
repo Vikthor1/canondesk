@@ -24,8 +24,8 @@
 - No `assets/js/` files — not yet.
 - No `assets/css/styles.css` — not yet.
 - No `assets/data/*.json` — not yet.
-- No GitHub repo — not yet (local git initialized; remote push pending).
-- No Obsidian folder yet (vault path not yet confirmed).
+- GitHub repo created and pushed: https://github.com/Vikthor1/canondesk (private).
+- Obsidian layer initialized: `/Users/Victor1/Documents/Obsidian/Projects/CanonDesk/` (6 starter notes).
 - No backend, no API keys, no MCP, no external integrations.
 - No Tu Pana files modified.
 
@@ -64,9 +64,9 @@
 ## Open Decisions
 
 - [ ] Confirm final product name (CanonDesk / Provenance / ScholarBridge)
-- [ ] Decide GitHub repo visibility (public or private) and create remote under `Vikthor1`
 - [ ] Confirm August demo audience and demo mode (roadmap recommends Mode 3 — Administrative / Faculty Affairs)
-- [ ] Confirm Obsidian vault path so CanonDesk folder can be created
+- [x] GitHub repo created: https://github.com/Vikthor1/canondesk (private)
+- [x] Obsidian vault path confirmed and layer initialized
 
 ---
 
@@ -80,8 +80,15 @@ The repo is the source of truth for all implementation and documentation. Obsidi
 
 **Separation:** CanonDesk notes must be in a dedicated Obsidian folder, separate from Tu Pana notes.
 
-**Planned location (vault path TBD):**
+**Confirmed Obsidian location:**
 ```
-[OBSIDIAN_VAULT_PATH]/Projects/CanonDesk/
+/Users/Victor1/Documents/Obsidian/Projects/CanonDesk/
 ```
-Do not create Obsidian files until the vault path is confirmed. Record it in `SYSTEM_MEMORY.md §11` once known.
+
+**Starter notes (created 2026-05-26):**
+- `00 CanonDesk Index.md`
+- `01 Project Purpose and Fellowship Context.md`
+- `02 Product Strategy and Naming.md`
+- `03 Governance Architecture Notes.md`
+- `04 CUNY Faculty Affairs and CTL Use Cases.md`
+- `05 Future SaaS and Monetization Ideas.md`

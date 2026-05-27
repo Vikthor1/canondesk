@@ -132,8 +132,9 @@ The GitHub repo (`~/Sites/canondesk/`) is the source of truth for all implementa
 
 **Separation:** CanonDesk Obsidian notes must remain in a dedicated folder, separate from Tu Pana Obsidian notes.
 
-**Planned location (vault path TBD):**
+**Confirmed Obsidian location:**
 ```
-[OBSIDIAN_VAULT_PATH]/Projects/CanonDesk/
+/Users/Victor1/Documents/Obsidian/Projects/CanonDesk/
 ```
-Do not create Obsidian files until the vault path is confirmed.
+
+Starter notes initialized 2026-05-26: project index, purpose and fellowship context, product strategy and naming, governance architecture, CUNY use cases, future SaaS thinking.
