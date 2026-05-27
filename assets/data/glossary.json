@@ -1,7 +1,9 @@
 {
   "meta": {
-    "workingName": "CanonDesk",
-    "brandingStatus": "provisional",
+    "appName": "Veritas Compass",
+    "formerWorkingName": "CanonDesk",
+    "tagline": "An AI workflow guide for privacy, authorship, and academic judgment",
+    "brandingStatus": "active-name-repo-pending",
     "version": "0.1.0-stub",
     "note": "Core governance terms are defined here. Mode-specific label overrides are in the modeLabels field. UI must resolve labels through modes.json, not hard-code them."
   },

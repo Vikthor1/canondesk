@@ -1,10 +1,52 @@
 # Veritas Compass — Session Status
 
-*Last updated: 2026-05-26*
+*Last updated: 2026-05-27*
 
 ---
 
-## Current Phase: Week 1 — Data Layer Complete
+## Current Phase: Week 2 — Patch 1 Complete
+
+### Patch 1 — Static Shell and Boot Architecture (2026-05-27 — Session 3)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `index.html` | Created — semantic HTML shell, skip link, header, main, footer, disclaimer area, script load order |
+| `assets/css/styles.css` | Created — design tokens (spacing, type, radius, shadows, risk colors), base reset, header/main/footer layout, card, status, button, responsive |
+| `assets/js/config.js` | Created — `window.VC_CONFIG` with appName, tagline, version, storageKey, defaultMode, dataPaths, FEATURES flags |
+| `assets/js/state.js` | Created — `window.VC_STATE` with getState, loadState, saveState, setMode, patch, resetState; localStorage isolated here |
+| `assets/js/data-loader.js` | Created — `window.VC_DATA` with loadAll, getAll, getDataset; fetch + error handling; no DOM access |
+| `assets/js/app.js` | Created — DOMContentLoaded boot sequence; populates header/footer from config; renders boot status screen with counts, active mode, disclaimer, reset button |
+| `assets/data/modes.json` | Meta updated: appName, formerWorkingName, tagline, brandingStatus: active-name-repo-pending |
+| `assets/data/rules.json` | Meta updated: same pattern |
+| `assets/data/scenarios.json` | Meta updated: same pattern |
+| `assets/data/glossary.json` | Meta updated: same pattern |
+
+**JSON validation:** All four files valid (python3 json.load).
+
+**Boot screen renders:**
+- App name and tagline from `VC_CONFIG` (never hard-coded in JS/HTML rendering logic)
+- Boot status: success or error message
+- Active mode ID from `VC_STATE`
+- Data counts: 4 modes, 7 material categories, 5 scenarios, 10 governance terms
+- Disclaimer text
+- Reset button (clears localStorage, re-renders)
+
+**Script load order:** `config.js → state.js → data-loader.js → app.js`
+
+**To test locally:**
+```
+cd ~/Sites/canondesk && python3 -m http.server 8080
+# Open: http://localhost:8080
+```
+
+**Patch 2 — Mode Selector and State Persistence**
+Next session: create `assets/js/ui.js` (mode selector render function), extend `app.js` to route to mode selector, extend `styles.css` with mode card components, wire mode selector screen container in `index.html`. Persist mode selection to localStorage. Mode 3 visually distinguished.
+
+---
+
+## Current Phase (prior): Week 1 — Data Layer Complete
 
 ### Scaffolding (2026-05-26 — Session 1)
 

@@ -1,7 +1,9 @@
 {
   "meta": {
-    "workingName": "CanonDesk",
-    "brandingStatus": "provisional",
+    "appName": "Veritas Compass",
+    "formerWorkingName": "CanonDesk",
+    "tagline": "An AI workflow guide for privacy, authorship, and academic judgment",
+    "brandingStatus": "active-name-repo-pending",
     "version": "0.1.0-stub",
     "note": "Mode 3 scenarios are active for the August demo. All other mode scenarios are stubs — schema is correct, content is placeholder."
   },

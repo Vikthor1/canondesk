@@ -1,0 +1,332 @@
+/* =============================================================================
+   Veritas Compass — Design Tokens and Base Styles
+   Patch 1: static shell and boot architecture
+   ============================================================================= */
+
+/* --- Custom Properties (Design Tokens) --------------------------------------- */
+
+:root {
+  /* Spacing */
+  --space-xs:  0.25rem;
+  --space-sm:  0.5rem;
+  --space-md:  1rem;
+  --space-lg:  1.5rem;
+  --space-xl:  2rem;
+  --space-2xl: 3rem;
+
+  /* Typography */
+  --font-family:        system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --font-size-xs:       0.75rem;
+  --font-size-sm:       0.875rem;
+  --font-size-base:     1rem;
+  --font-size-lg:       1.125rem;
+  --font-size-xl:       1.25rem;
+  --font-size-2xl:      1.5rem;
+  --font-size-3xl:      2rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semi:   600;
+  --font-weight-bold:   700;
+  --line-height-tight:  1.25;
+  --line-height-snug:   1.4;
+  --line-height-base:   1.65;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.07);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.14);
+
+  /* Color — neutrals */
+  --color-bg:          #f4f5f7;
+  --color-surface:     #ffffff;
+  --color-border:      #d1d5db;
+  --color-text:        #1f2937;
+  --color-text-muted:  #6b7280;
+
+  /* Color — brand / header */
+  --color-header-bg:   #1a2b4a;
+  --color-header-text: #f0f4ff;
+  --color-footer-bg:   #eef0f3;
+  --color-footer-text: #4b5563;
+
+  /* Color — interactive */
+  --color-focus:       #2563eb;
+  --color-btn-bg:      #1a2b4a;
+  --color-btn-text:    #ffffff;
+  --color-btn-hover:   #243d6b;
+
+  /* Risk colors */
+  --color-safe:             #166534;
+  --color-safe-bg:          #f0fdf4;
+  --color-safe-border:      #86efac;
+  --color-review:           #92400e;
+  --color-review-bg:        #fffbeb;
+  --color-review-border:    #fcd34d;
+  --color-restricted:       #991b1b;
+  --color-restricted-bg:    #fef2f2;
+  --color-restricted-border:#fca5a5;
+
+  /* Layout */
+  --max-width:    860px;
+  --header-height: 4rem;
+}
+
+/* --- Reset and Base ---------------------------------------------------------- */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Accessible Focus States ------------------------------------------------- */
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* --- Skip Link --------------------------------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-md);
+  z-index: 9999;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-focus);
+  color: #ffffff;
+  font-weight: var(--font-weight-semi);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: var(--space-md);
+}
+
+/* --- Layout: Header ---------------------------------------------------------- */
+
+header[role="banner"] {
+  background-color: var(--color-header-bg);
+  color: var(--color-header-text);
+  padding: var(--space-md) 0;
+  box-shadow: var(--shadow-md);
+  flex-shrink: 0;
+}
+
+.header-brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.header-app-name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
+  color: var(--color-header-text);
+}
+
+.header-tagline {
+  font-size: var(--font-size-sm);
+  color: rgba(240, 244, 255, 0.75);
+  font-style: italic;
+}
+
+/* --- Layout: Main ------------------------------------------------------------ */
+
+main[role="main"] {
+  flex: 1;
+  padding: var(--space-xl) 0;
+}
+
+/* --- Layout: Footer ---------------------------------------------------------- */
+
+footer[role="contentinfo"] {
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  padding: var(--space-lg) 0;
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.footer-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-top: var(--space-xs);
+}
+
+/* --- Container --------------------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+/* --- Cards ------------------------------------------------------------------- */
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+}
+
+/* --- Status and Error Messages ----------------------------------------------- */
+
+.status-message {
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding: var(--space-md) 0;
+}
+
+.status-success {
+  background-color: var(--color-safe-bg);
+  border: 1px solid var(--color-safe-border);
+  color: var(--color-safe);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  margin: var(--space-md) 0;
+}
+
+.status-error {
+  background-color: var(--color-restricted-bg);
+  border: 1px solid var(--color-restricted-border);
+  color: var(--color-restricted);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  margin: var(--space-md) 0;
+}
+
+/* --- Disclaimer -------------------------------------------------------------- */
+
+.disclaimer {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-md);
+  margin-top: var(--space-lg);
+  line-height: var(--line-height-snug);
+}
+
+/* --- Buttons ----------------------------------------------------------------- */
+
+.btn {
+  display: inline-block;
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-reset {
+  background-color: var(--color-btn-bg);
+  color: var(--color-btn-text);
+  margin-top: var(--space-lg);
+}
+
+.btn-reset:hover {
+  background-color: var(--color-btn-hover);
+  box-shadow: var(--shadow-sm);
+}
+
+/* --- Boot Screen Specific ---------------------------------------------------- */
+
+.boot-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-header-bg);
+  margin-bottom: var(--space-xs);
+}
+
+.boot-tagline {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-bottom: var(--space-md);
+}
+
+.boot-mode {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.boot-counts {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-xl);
+  margin: var(--space-md) 0;
+  padding: var(--space-md);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.boot-counts strong {
+  color: var(--color-text);
+  font-weight: var(--font-weight-semi);
+}
+
+/* --- Responsive -------------------------------------------------------------- */
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0 var(--space-md);
+  }
+
+  .card {
+    padding: var(--space-lg);
+  }
+
+  .boot-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .boot-counts {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+}
