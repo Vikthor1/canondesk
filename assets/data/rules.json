@@ -157,6 +157,106 @@
       "status": "active"
     },
     {
+      "id": "published-scholarship",
+      "label": "Published scholarship or public research output",
+      "description": "Peer-reviewed articles, books, conference papers, or other officially published scholarly work.",
+      "applicableModes": ["faculty-research"],
+      "routingRules": {
+        "defaultLayer": 1,
+        "conditions": [
+          {
+            "id": "canonical-published",
+            "label": "Published and publicly available",
+            "layer": 1,
+            "recommendation": "safe-with-attribution",
+            "message": "Published scholarship is a canonical source. Safe for AI reference and citation. AI summaries must cite the source document and cannot replace scholarly attribution.",
+            "severity": "informational"
+          }
+        ]
+      },
+      "status": "active"
+    },
+    {
+      "id": "own-unpublished-draft",
+      "label": "Own unpublished draft or work in progress",
+      "description": "Sole-authored unpublished manuscripts, article drafts, book chapters, or working papers not yet officially submitted or published.",
+      "applicableModes": ["faculty-research"],
+      "routingRules": {
+        "defaultLayer": 2,
+        "conditions": [
+          {
+            "id": "sole-authored-draft",
+            "label": "Sole-authored, not submitted",
+            "layer": 2,
+            "recommendation": "safe-with-review",
+            "message": "A sole-authored unpublished draft may be used for AI-assisted revision with human review. Check tool terms of service and any applicable funder or institutional restrictions.",
+            "severity": "advisory"
+          }
+        ]
+      },
+      "status": "active"
+    },
+    {
+      "id": "coauthored-unpublished-material",
+      "label": "Co-authored unpublished material",
+      "description": "Unpublished manuscripts, drafts, or research material with one or more co-authors.",
+      "applicableModes": ["faculty-research"],
+      "routingRules": {
+        "defaultLayer": 5,
+        "conditions": [
+          {
+            "id": "coauthor-restricted",
+            "label": "Co-authored, consent not established",
+            "layer": 5,
+            "recommendation": "restricted",
+            "message": "Co-authored unpublished material should not enter external AI tools unless all co-authors have explicitly agreed and any applicable publication agreements, funder restrictions, and institutional policies have been reviewed.",
+            "severity": "blocking"
+          }
+        ]
+      },
+      "status": "active"
+    },
+    {
+      "id": "grant-proposal-or-fellowship",
+      "label": "Grant proposal or fellowship application",
+      "description": "Grant proposals, fellowship applications, or related funding documents in preparation or under review.",
+      "applicableModes": ["faculty-research"],
+      "routingRules": {
+        "defaultLayer": 2,
+        "conditions": [
+          {
+            "id": "grant-review-required",
+            "label": "Grant or fellowship — funder rules apply",
+            "layer": 2,
+            "recommendation": "safe-with-review",
+            "message": "Grant and fellowship materials may be AI-assisted with careful human review. Confirm funder and institutional policies on AI-assisted proposal writing before use.",
+            "severity": "advisory"
+          }
+        ]
+      },
+      "status": "active"
+    },
+    {
+      "id": "human-subjects-or-irb-material",
+      "label": "Human-subjects, IRB, interview, fieldnote, or restricted research material",
+      "description": "Research data from human subjects, identifiable interviews or fieldnotes, IRB-covered materials, or any restricted research data.",
+      "applicableModes": ["faculty-research"],
+      "routingRules": {
+        "defaultLayer": 5,
+        "conditions": [
+          {
+            "id": "irb-restricted",
+            "label": "IRB or human-subjects material",
+            "layer": 5,
+            "recommendation": "restricted",
+            "message": "Human-subjects research data, identifiable fieldnotes, interviews, and IRB-covered materials must not enter external AI tools without explicit institutional and IRB authorization.",
+            "severity": "blocking"
+          }
+        ]
+      },
+      "status": "active"
+    },
+    {
       "id": "manuscript-draft",
       "label": "Manuscript or Research Draft",
       "description": "Unpublished research writing, article drafts, book chapters, or grant narratives in development.",

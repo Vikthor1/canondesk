@@ -52,7 +52,8 @@
       var hasPersonnel    = answers.hasPersonnel     || 'not-sure';
       var hasStudent      = answers.hasStudentData   || 'not-sure';
       var hasConfidential = answers.hasConfidential  || 'not-sure';
-      var isAiOutput      = answers.isAiOutput       || 'not-sure';
+      var isAiOutput           = answers.isAiOutput            || 'not-sure';
+      var hasResearchSensitive = answers.hasResearchSensitive  || '';
 
       var warnings        = [];
       var allowedActions  = [];
@@ -127,6 +128,24 @@
         return buildResult(recommendation, materialId, workflowRoute, warnings, rationale, allowedActions, blockedActions, reviewPrompts);
       }
 
+      // ── Research-sensitive data — restricted (faculty-research) ───────────
+      if (hasResearchSensitive === 'yes' || hasResearchSensitive === 'not-sure') {
+        recommendation = 'restricted';
+        rationale = 'This material contains or may contain human-subjects data, identifiable ' +
+          'fieldnotes or interview material, IRB-covered research, or restricted research data. ' +
+          'It must not enter external AI tools without explicit institutional and IRB authorization.';
+        blockedActions = [
+          'Do not enter this material into any external AI tool, chatbot, or API.',
+          'Consult your institution\'s IRB office and data governance policies before any AI use.',
+          'De-identified or aggregate data may be routable — verify through institutional channels first.'
+        ];
+        reviewPrompts = [
+          'Does your IRB protocol address AI-assisted analysis of this material?',
+          'Who at your institution governs research data access and AI-use decisions?'
+        ];
+        return buildResult(recommendation, materialId, workflowRoute, warnings, rationale, allowedActions, blockedActions, reviewPrompts);
+      }
+
       // ── Material-category routing ───────────────────────────────────────────
       if (materialId === 'personnel-records') {
         recommendation = 'restricted';
@@ -197,6 +216,88 @@
           'AI-assisted output based on this material cannot replace the official approved version.'
         ];
         warnings.push('Cite the source document in any AI-assisted summary or briefing.');
+
+      } else if (materialId === 'published-scholarship') {
+        recommendation = 'safe-with-attribution';
+        rationale = 'Published scholarship is a canonical source. It is safe for AI reference ' +
+          'and citation with proper attribution. AI-generated summaries should not replace ' +
+          'citation, scholarly context, or human interpretation.';
+        allowedActions = [
+          'Use AI to summarize, synthesize, or draft from published work with attribution.',
+          'Cite the original source explicitly in any AI-assisted output.',
+          'Include as a reference in a human-reviewed research working packet.'
+        ];
+        blockedActions = [
+          'Do not use AI-assisted summaries as a substitute for proper scholarly citation.',
+          'AI output based on this material cannot replace the original published source.'
+        ];
+        warnings.push('Cite all source material explicitly in any AI-assisted output.');
+
+      } else if (materialId === 'own-unpublished-draft') {
+        recommendation = 'safe-with-review';
+        rationale = 'A sole-authored unpublished draft may be used for AI-assisted revision ' +
+          'or drafting with human review. External tool terms of service, intellectual property ' +
+          'considerations, funder data policies, and confidentiality obligations still apply.';
+        allowedActions = [
+          'Use AI to revise, improve, or draft from your own unpublished work.',
+          'Review all AI-assisted revisions before submission or sharing.',
+          'Confirm the tool\'s terms of service do not claim rights over submitted content.'
+        ];
+        reviewPrompts = [
+          'Have you reviewed the AI tool\'s terms of service regarding intellectual property?',
+          'Does your funder or institution restrict submission of pre-publication work to AI tools?',
+          'What status should AI-assisted revisions have before they enter the manuscript?'
+        ];
+        warnings.push('Review funder and institutional policies before submitting pre-publication work to external AI tools.');
+
+      } else if (materialId === 'coauthored-unpublished-material') {
+        recommendation = 'restricted';
+        rationale = 'Co-authored unpublished material should not enter external AI tools ' +
+          'unless all co-authors have explicitly agreed and any applicable publication ' +
+          'agreements, funder restrictions, and institutional data policies have been reviewed.';
+        blockedActions = [
+          'Do not submit co-authored unpublished work to external AI tools without explicit co-author consent.',
+          'Do not use AI to revise, summarize, or draft from co-authored material without co-author agreement.',
+          'Review any applicable publication agreements, funder restrictions, and institutional policies.'
+        ];
+        reviewPrompts = [
+          'Have all co-authors explicitly agreed to AI use with this material?',
+          'Do any co-authorship agreements, journal policies, or funder rules restrict AI processing?',
+          'Who among the co-authors should be consulted before proceeding?'
+        ];
+
+      } else if (materialId === 'grant-proposal-or-fellowship') {
+        recommendation = 'safe-with-review';
+        rationale = 'Grant and fellowship materials may be AI-assisted with careful human ' +
+          'review and attention to funder rules, institutional policies, and any collaborator ' +
+          'agreements. This tool does not verify compliance with funder requirements.';
+        allowedActions = [
+          'Use AI to help draft, revise, or improve narrative language with human review.',
+          'Confirm funder and institutional rules on AI-assisted proposal writing before use.',
+          'Review all AI-assisted output before submission.'
+        ];
+        reviewPrompts = [
+          'Do the funder\'s rules address AI-assisted writing or data use?',
+          'Does your institution have a policy on AI use in grant submissions?',
+          'Who reviews this before submission — PI, department, or sponsored programs office?'
+        ];
+        warnings.push('Review funder and institutional policies on AI-assisted proposal writing before submitting.');
+
+      } else if (materialId === 'human-subjects-or-irb-material') {
+        recommendation = 'restricted';
+        rationale = 'Human-subjects research data, identifiable fieldnotes, interviews, ' +
+          'IRB-covered materials, or other restricted research data must not enter external ' +
+          'AI tools without explicit institutional and IRB authorization.';
+        blockedActions = [
+          'Do not enter identifiable human-subjects data into any external AI tool.',
+          'Do not use AI to analyze, summarize, or process IRB-covered materials without authorization.',
+          'Consult your IRB office and institution\'s research data governance policy before any AI use.'
+        ];
+        reviewPrompts = [
+          'Does your IRB protocol address AI-assisted analysis of this data?',
+          'Have you consulted your institution\'s research data governance or IRB office?',
+          'Is any de-identified or aggregate form of this data available and appropriate for AI use?'
+        ];
 
       } else {
         // Unknown or unrecognised material type — conservative default

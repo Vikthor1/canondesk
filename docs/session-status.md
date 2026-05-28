@@ -4,6 +4,48 @@
 
 ---
 
+## Patch F1 — Minimal Faculty / Research Secondary Route (2026-05-27 — Session 14)
+
+**Status:** Complete. Exit criterion met.
+
+| File | Action |
+|---|---|
+| `assets/data/modes.json` | `faculty-research` status changed from `stub` to `active` |
+| `assets/data/scenarios.json` | New active scenario `faculty-research-abstract-grant` added |
+| `assets/data/rules.json` | Five active Faculty / Research material categories added: `published-scholarship`, `own-unpublished-draft`, `coauthored-unpublished-material`, `grant-proposal-or-fellowship`, `human-subjects-or-irb-material` |
+| `assets/js/rules-engine.js` | `hasResearchSensitive` extracted from answers; research-sensitive guard added; five Faculty / Research material-category routing branches added |
+| `assets/js/ui.js` | Mode guard extended to include `faculty-research`; `researchSensitiveHtml` fieldset added (mode-conditional); answers object extended for faculty-research; badge detection updated to match "suggested"; stub notices updated to mention both active modes |
+| `docs/session-status.md` | Updated |
+
+**What Patch F1 added:**
+
+- **Faculty / Research mode active**: `faculty-research` status changed from `stub` to `active` in `modes.json`.
+- **One active Faculty / Research scenario**: `faculty-research-abstract-grant` — "Preparing a Research Abstract or Grant Narrative with AI Assistance." Shows "Suggested scenario" badge.
+- **Five Faculty / Research material categories** (all active, `applicableModes: ["faculty-research"]`):
+  - `published-scholarship` → safe-with-attribution
+  - `own-unpublished-draft` → safe-with-review
+  - `coauthored-unpublished-material` → restricted by default (no co-author consent gate; see below)
+  - `grant-proposal-or-fellowship` → safe-with-review
+  - `human-subjects-or-irb-material` → restricted
+- **Research-sensitive question**: Added to router for `faculty-research` mode only. "Does this material include human-subjects data, identifiable interview or fieldnote material, IRB-covered research, or restricted research data?" Yes or not-sure escalates to restricted with IRB-specific rationale and review prompts.
+- **Co-author consent handling**: `coauthored-unpublished-material` is restricted by default. No consent-gate UI added — kept simple per scope guidance. Review prompts ask about co-author agreement.
+- **Rules engine extended conservatively**: Five Faculty / Research routing branches added. All existing guards (no-recursive-upload, personnel, student, confidential) remain active for all modes. Research-sensitive guard placed after confidential check, before material-category routing.
+- **Teaching / CTL and Tool Testing remain scaffolded**: Stub notices in scenario selector and material router updated to mention both Administrative and Faculty / Research as available workflows.
+- **Router UI extended**: `renderMaterialRouter` now renders the full router for both `administrative` and `faculty-research` modes. Stub notice shown only for `teaching-ctl` and `tool-testing`.
+- **Result and export screens unchanged**: Both work correctly for Faculty / Research via existing generic mode-agnostic lookup functions in `ui.js` and `report-builder.js`.
+
+**Not built (confirmed absent):**
+- No new screens
+- No packet builder, AI-Safe Packet Gate, live AI, backend, file upload, MCP, or sanitizer
+- No Teaching / CTL or Tool Testing route functionality
+- No major ui.js refactor or broad CSS changes
+- No Patch 9 deployment work
+- No Tu Pana files touched
+
+**Next recommended step:** Browser test both Administrative and Faculty / Research paths end-to-end, then Patch 9 — GitHub Pages deployment readiness.
+
+---
+
 ## Patch 8B — Accessibility, UX, and Polish Remediation (2026-05-27 — Session 13)
 
 **Status:** Complete. Exit criterion met.

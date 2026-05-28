@@ -139,6 +139,17 @@
       "status": "active"
     },
     {
+      "id": "faculty-research-abstract-grant",
+      "mode": "faculty-research",
+      "title": "Preparing a Research Abstract or Grant Narrative with AI Assistance",
+      "shortDescription": "Which parts of my scholarly writing can safely move through AI tools without exposing unpublished or sensitive research material?",
+      "fullDescription": "A faculty member wants to use AI to help revise or summarize scholarly material without exposing unpublished, co-authored, funder-sensitive, or human-subjects material. Veritas Compass helps distinguish what can safely move through AI tools and what must stay protected.",
+      "materials": ["published-scholarship", "own-unpublished-draft", "coauthored-unpublished-material", "grant-proposal-or-fellowship", "human-subjects-or-irb-material"],
+      "steps": [],
+      "demoNotes": "Suggested scenario for Faculty / Research workflow. Demonstrates how the same governance architecture adapts from administrative to scholarly contexts.",
+      "status": "active"
+    },
+    {
       "id": "mode1-grant-proposal",
       "mode": "faculty-research",
       "title": "Grant Proposal Preparation",

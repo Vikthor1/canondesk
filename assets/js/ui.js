@@ -347,8 +347,10 @@
       var scenarioCardsHtml;
       if (activeScenarios.length > 0) {
         scenarioCardsHtml = activeScenarios.map(function (scenario) {
-          var isPrimary = !!(scenario.demoNotes &&
-            scenario.demoNotes.toLowerCase().indexOf('primary') === 0);
+          var isPrimary = !!(scenario.demoNotes && (
+            scenario.demoNotes.toLowerCase().indexOf('primary') === 0 ||
+            scenario.demoNotes.toLowerCase().indexOf('suggested') === 0
+          ));
           var badgeHtml = isPrimary
             ? '<div class="scenario-badge">Suggested scenario</div>'
             : '';
@@ -365,9 +367,10 @@
       } else {
         scenarioCardsHtml =
           '<div class="scenario-stub-notice">' +
-            '<p>Scenarios for this role will be available soon. For now, use the ' +
-            '<strong>Administrative / Faculty Affairs</strong> workflow to try the full guided experience.</p>' +
-            '<p>Use the button below to return to role selection and try that workflow.</p>' +
+            '<p>Scenarios for this role will be available soon. For a full guided experience, ' +
+            'try the <strong>Administrative / Faculty Affairs</strong> or ' +
+            '<strong>Faculty / Research</strong> workflow.</p>' +
+            '<p>Use the button below to return to role selection.</p>' +
           '</div>';
       }
 
@@ -459,17 +462,18 @@
         ? 'My own material'
         : (scenario ? scenario.title : 'Selected scenario');
 
-      // Non-admin modes: stub notice
-      if (state.activeMode !== DEMO_MODE_ID) {
+      // Stub notice for modes without full routing yet
+      if (state.activeMode !== DEMO_MODE_ID && state.activeMode !== 'faculty-research') {
         root.innerHTML =
           '<div class="screen router-screen">' +
             '<div class="router-header">' +
               '<h2 class="router-heading" tabindex="-1">Route your material</h2>' +
             '</div>' +
             '<div class="scenario-stub-notice">' +
-              '<p>Material routing for this role is coming soon. Please select the ' +
-              '<strong>Administrative / Faculty Affairs</strong> role to use the full routing flow.</p>' +
-              '<p>Use the button below to return to role selection and try that workflow.</p>' +
+              '<p>Material routing for this role is coming soon. For a full guided experience, ' +
+              'select the <strong>Administrative / Faculty Affairs</strong> or ' +
+              '<strong>Faculty / Research</strong> workflow.</p>' +
+              '<p>Use the button below to return to role selection and try those workflows.</p>' +
             '</div>' +
             '<div class="router-nav">' +
               '<button class="btn btn-ghost" id="btn-back-scenarios" type="button">' +
@@ -517,6 +521,17 @@
             '</label>';
         }).join('');
       }
+
+      var researchSensitiveHtml = state.activeMode === 'faculty-research'
+        ? '<fieldset class="router-fieldset">' +
+            '<legend class="router-label">' +
+              'Does this material include human-subjects data, identifiable interview or fieldnote material, IRB-covered research, or restricted research data?' +
+            '</legend>' +
+            '<div class="router-radio-group router-radio-group--inline">' +
+              triOptions('hasResearchSensitive') +
+            '</div>' +
+          '</fieldset>'
+        : '';
 
       root.innerHTML =
         '<div class="screen router-screen">' +
@@ -583,6 +598,8 @@
               '</div>' +
             '</fieldset>' +
 
+            researchSensitiveHtml +
+
             '<div class="router-form-actions">' +
               '<button class="btn btn-primary" type="submit" id="btn-router-submit">' +
                 'Get routing recommendation &#8594;' +
@@ -634,6 +651,9 @@
             hasConfidential:  getRadioVal('hasConfidential', 'not-sure'),
             isAiOutput:       getRadioVal('isAiOutput',      'not-sure')
           };
+          if (state.activeMode === 'faculty-research') {
+            answers.hasResearchSensitive = getRadioVal('hasResearchSensitive', 'not-sure');
+          }
 
           var result = VC_RULES.evaluateRouterAnswers(answers, data);
           VC_STATE.setRouterResult(answers, result);
