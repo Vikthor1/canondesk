@@ -290,12 +290,17 @@
           '</div>' +
         '</div>';
 
-      // Wire mode selection — navigates directly to scenario selector
+      // Wire mode selection — administrative route shows orientation screen first
       VC_UTILS.qsa('[data-mode-id]', root).forEach(function (btn) {
         btn.addEventListener('click', function () {
-          VC_STATE.setMode(btn.getAttribute('data-mode-id'));
+          var modeId = btn.getAttribute('data-mode-id');
+          VC_STATE.setMode(modeId);
           ctx.state = VC_STATE.getState();
-          VC_UI.renderScenarioSelector(ctx);
+          if (modeId === 'administrative') {
+            VC_UI.renderAdminOnboarding(ctx);
+          } else {
+            VC_UI.renderScenarioSelector(ctx);
+          }
         });
       });
 
@@ -319,6 +324,85 @@
           VC_UI.renderLandingScreen(ctx);
         });
       }
+    },
+
+    /* ── Administrative / Faculty Affairs onboarding ────────────────────────── */
+
+    renderAdminOnboarding: function (ctx) {
+      document.body.classList.remove('is-landing');
+
+      var root = ctx.root;
+      var esc  = VC_UTILS.escHtml;
+
+      var items = [
+        {
+          label: 'No document upload.',
+          body:  'Veritas Compass does not process, store, or transmit your documents. All routing decisions happen locally in your browser.'
+        },
+        {
+          label: 'Decision support, not legal advice.',
+          body:  'Recommendations reflect general governance best practices. Your institution\'s policies and professional judgment always take precedence.'
+        },
+        {
+          label: 'Sessions are private to your browser.',
+          body:  'No routing decisions are logged, reported, or shared externally. This tool is for your benefit, not for oversight.'
+        },
+        {
+          label: 'Material type determines the decision.',
+          body:  'Personnel files, committee records, student information, and public policy documents each require different handling. The routing questions will help you think through the relevant distinctions.'
+        },
+        {
+          label: 'Human review is the final step.',
+          body:  'Routing recommendations help frame decisions. They do not replace the review, sign-off, or institutional judgment required before AI-assisted work enters the official record.'
+        }
+      ];
+
+      var itemsHtml = items.map(function (item) {
+        return '<li class="onboarding-item">' +
+            '<span class="onboarding-item-label">' + esc(item.label) + '</span> ' +
+            esc(item.body) +
+          '</li>';
+      }).join('');
+
+      root.innerHTML =
+        '<div class="screen onboarding-screen">' +
+          '<div class="onboarding-header">' +
+            '<h2 class="onboarding-heading" tabindex="-1">Before you begin</h2>' +
+            '<p class="onboarding-sub">' +
+              'A brief orientation for Faculty Affairs staff, administrators, and department chairs.' +
+            '</p>' +
+          '</div>' +
+          '<ul class="onboarding-list" aria-label="Orientation points">' +
+            itemsHtml +
+          '</ul>' +
+          '<div class="onboarding-actions">' +
+            '<button class="btn btn-primary" id="btn-onboarding-continue" type="button">' +
+              'Continue to scenarios &#8594;' +
+            '</button>' +
+          '</div>' +
+          '<div class="onboarding-nav">' +
+            '<button class="btn btn-ghost" id="btn-onboarding-back" type="button">' +
+              '&larr; Back to role selection' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+
+      var continueBtn = VC_UTILS.qs('#btn-onboarding-continue', root);
+      if (continueBtn) {
+        continueBtn.addEventListener('click', function () {
+          VC_UI.renderScenarioSelector(ctx);
+        });
+      }
+
+      var backBtn = VC_UTILS.qs('#btn-onboarding-back', root);
+      if (backBtn) {
+        backBtn.addEventListener('click', function () {
+          VC_UI.renderModeSelector(ctx);
+        });
+      }
+
+      var heading = VC_UTILS.qs('.onboarding-heading', root);
+      if (heading) { heading.focus(); }
     },
 
     /* ── Scenario selector ───────────────────────────────────────────────────── */
