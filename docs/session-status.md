@@ -4,6 +4,17 @@
 
 ---
 
+## NotebookLM Curated Export Layer (2026-05-27 — Session 15)
+
+**Status:** Complete. Documentation only.
+
+NotebookLM export layer created at `docs/notebooklm-exports/` (five packets):
+`01-product-and-demo-brief.md`, `02-current-architecture-and-flow.md`, `03-governance-rules-and-boundaries.md`, `04-patch-history-and-current-status.md`, `05-deferred-features-and-scope-guards.md`.
+
+No implementation files changed. No JSON files changed. Next intended task: Patch 9 — GitHub Pages deployment readiness.
+
+---
+
 ## Patch F1 — Minimal Faculty / Research Secondary Route (2026-05-27 — Session 14)
 
 **Status:** Complete. Exit criterion met.
